@@ -14,6 +14,8 @@
 		DC4118432523840900A38ED5 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC4118422523840900A38ED5 /* CoreFoundation.framework */; };
 		DC4118452523841100A38ED5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC4118442523841100A38ED5 /* Accelerate.framework */; };
 		DC4118472523844600A38ED5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC4118462523844600A38ED5 /* UIKit.framework */; };
+		DC411849252385B800A38ED5 /* ConvertColor.mm in Sources */ = {isa = PBXBuildFile; fileRef = DC411848252385B800A38ED5 /* ConvertColor.mm */; };
+		DC41184B252385C600A38ED5 /* ConvertColor.h in Headers */ = {isa = PBXBuildFile; fileRef = DC41184A252385C600A38ED5 /* ConvertColor.h */; };
 		DC67E4442522C66F0037C91E /* RBImageProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = DC67E4422522C66F0037C91E /* RBImageProcessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DC67E44B2522C8FD0037C91E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DC67E44A2522C8FD0037C91E /* README.md */; };
 /* End PBXBuildFile section */
@@ -26,6 +28,8 @@
 		DC4118422523840900A38ED5 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		DC4118442523841100A38ED5 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/Accelerate.framework; sourceTree = DEVELOPER_DIR; };
 		DC4118462523844600A38ED5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		DC411848252385B800A38ED5 /* ConvertColor.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConvertColor.mm; sourceTree = "<group>"; };
+		DC41184A252385C600A38ED5 /* ConvertColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConvertColor.h; sourceTree = "<group>"; };
 		DC67E43F2522C66F0037C91E /* RBImageProcessor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RBImageProcessor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC67E4422522C66F0037C91E /* RBImageProcessor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RBImageProcessor.h; sourceTree = "<group>"; };
 		DC67E4432522C66F0037C91E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -86,6 +90,8 @@
 			isa = PBXGroup;
 			children = (
 				DC67E4422522C66F0037C91E /* RBImageProcessor.h */,
+				DC41184A252385C600A38ED5 /* ConvertColor.h */,
+				DC411848252385B800A38ED5 /* ConvertColor.mm */,
 				DC67E4432522C66F0037C91E /* Info.plist */,
 			);
 			path = RBImageProcessor;
@@ -98,6 +104,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC41184B252385C600A38ED5 /* ConvertColor.h in Headers */,
 				DC67E4442522C66F0037C91E /* RBImageProcessor.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -171,6 +178,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC411849252385B800A38ED5 /* ConvertColor.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
