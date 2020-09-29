@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		DC67E4442522C66F0037C91E /* RBImageProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = DC67E4422522C66F0037C91E /* RBImageProcessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DC67E44B2522C8FD0037C91E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DC67E44A2522C8FD0037C91E /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		DC67E43F2522C66F0037C91E /* RBImageProcessor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RBImageProcessor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC67E4422522C66F0037C91E /* RBImageProcessor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RBImageProcessor.h; sourceTree = "<group>"; };
 		DC67E4432522C66F0037C91E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DC67E44A2522C8FD0037C91E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,6 +32,7 @@
 		DC67E4352522C66F0037C91E = {
 			isa = PBXGroup;
 			children = (
+				DC67E44A2522C8FD0037C91E /* README.md */,
 				DC67E4412522C66F0037C91E /* RBImageProcessor */,
 				DC67E4402522C66F0037C91E /* Products */,
 			);
@@ -121,6 +124,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC67E44B2522C8FD0037C91E /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
