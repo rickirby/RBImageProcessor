@@ -15,7 +15,7 @@
 		DC4118452523841100A38ED5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC4118442523841100A38ED5 /* Accelerate.framework */; };
 		DC4118472523844600A38ED5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC4118462523844600A38ED5 /* UIKit.framework */; };
 		DC411849252385B800A38ED5 /* ConvertColor.mm in Sources */ = {isa = PBXBuildFile; fileRef = DC411848252385B800A38ED5 /* ConvertColor.mm */; };
-		DC41184B252385C600A38ED5 /* ConvertColor.h in Headers */ = {isa = PBXBuildFile; fileRef = DC41184A252385C600A38ED5 /* ConvertColor.h */; };
+		DC41184B252385C600A38ED5 /* ConvertColor.h in Headers */ = {isa = PBXBuildFile; fileRef = DC41184A252385C600A38ED5 /* ConvertColor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DC67E4442522C66F0037C91E /* RBImageProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = DC67E4422522C66F0037C91E /* RBImageProcessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DC67E44B2522C8FD0037C91E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DC67E44A2522C8FD0037C91E /* README.md */; };
 /* End PBXBuildFile section */
