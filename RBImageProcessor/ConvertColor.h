@@ -12,8 +12,8 @@
 
 @interface ConvertColor : NSObject
 
-- (instancetype)initWithImage:(UIImage*)image;
-- (UIImage*)convertToGRAY;
-- (UIImage*)convertToHSV;
+- (instancetype _Nonnull)initWithImage:(UIImage *_Nonnull)image;
+- (UIImage *_Nonnull)convertToGRAY;
+- (UIImage *_Nonnull)convertToHSV;
 
 @end

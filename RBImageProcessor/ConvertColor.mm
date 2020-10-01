@@ -29,11 +29,11 @@ using namespace cv;
 	return self;
 }
 
-- (UIImage*)convertToGRAY {
+- (UIImage *)convertToGRAY {
 	return MatToUIImage(_convertColorProcessor->convertToGRAY());
 }
 
-- (UIImage*)convertToHSV {
+- (UIImage *)convertToHSV {
 	return MatToUIImage(_convertColorProcessor->convertToHSV());
 }
 
