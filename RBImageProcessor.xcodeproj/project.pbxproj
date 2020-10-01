@@ -16,6 +16,8 @@
 		DC4118472523844600A38ED5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC4118462523844600A38ED5 /* UIKit.framework */; };
 		DC411849252385B800A38ED5 /* ConvertColor.mm in Sources */ = {isa = PBXBuildFile; fileRef = DC411848252385B800A38ED5 /* ConvertColor.mm */; };
 		DC41184B252385C600A38ED5 /* ConvertColor.h in Headers */ = {isa = PBXBuildFile; fileRef = DC41184A252385C600A38ED5 /* ConvertColor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DC44441225254FA300D19AF9 /* ConvertColorProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC44441025254FA300D19AF9 /* ConvertColorProcessor.cpp */; };
+		DC44441325254FA300D19AF9 /* ConvertColorProcessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = DC44441125254FA300D19AF9 /* ConvertColorProcessor.hpp */; };
 		DC67E4442522C66F0037C91E /* RBImageProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = DC67E4422522C66F0037C91E /* RBImageProcessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DC67E44B2522C8FD0037C91E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DC67E44A2522C8FD0037C91E /* README.md */; };
 /* End PBXBuildFile section */
@@ -30,6 +32,8 @@
 		DC4118462523844600A38ED5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DC411848252385B800A38ED5 /* ConvertColor.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConvertColor.mm; sourceTree = "<group>"; };
 		DC41184A252385C600A38ED5 /* ConvertColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConvertColor.h; sourceTree = "<group>"; };
+		DC44441025254FA300D19AF9 /* ConvertColorProcessor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ConvertColorProcessor.cpp; sourceTree = "<group>"; };
+		DC44441125254FA300D19AF9 /* ConvertColorProcessor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ConvertColorProcessor.hpp; sourceTree = "<group>"; };
 		DC67E43F2522C66F0037C91E /* RBImageProcessor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RBImageProcessor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC67E4422522C66F0037C91E /* RBImageProcessor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RBImageProcessor.h; sourceTree = "<group>"; };
 		DC67E4432522C66F0037C91E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -92,6 +96,8 @@
 				DC67E4422522C66F0037C91E /* RBImageProcessor.h */,
 				DC41184A252385C600A38ED5 /* ConvertColor.h */,
 				DC411848252385B800A38ED5 /* ConvertColor.mm */,
+				DC44441025254FA300D19AF9 /* ConvertColorProcessor.cpp */,
+				DC44441125254FA300D19AF9 /* ConvertColorProcessor.hpp */,
 				DC67E4432522C66F0037C91E /* Info.plist */,
 			);
 			path = RBImageProcessor;
@@ -105,6 +111,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DC41184B252385C600A38ED5 /* ConvertColor.h in Headers */,
+				DC44441325254FA300D19AF9 /* ConvertColorProcessor.hpp in Headers */,
 				DC67E4442522C66F0037C91E /* RBImageProcessor.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -178,6 +185,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC44441225254FA300D19AF9 /* ConvertColorProcessor.cpp in Sources */,
 				DC411849252385B800A38ED5 /* ConvertColor.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
