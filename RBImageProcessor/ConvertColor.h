@@ -12,13 +12,8 @@
 
 @interface ConvertColor : NSObject
 
-+ (UIImage *) imageBGRtoGRAY: (UIImage *) image;
-+ (UIImage *) imageBGRtoGRAYMagic: (UIImage *) image;
-+ (UIImage *) imageBGRtoBlackAndWhite: (UIImage *) image;
-+ (UIImage *) imageBGRtoNeg: (UIImage *) image;
-+ (UIImage *) imageBGRtoNegMagic: (UIImage *) image;
-+ (UIImage *) imageBGRtoHSV: (UIImage *) image;
-+ (UIImage *) imageBGRtoMagic: (UIImage *) image;
-+ (UIImage *) imageBGRtoAdaptive: (UIImage *) image;
+- (instancetype)initWithImage:(UIImage*)image;
+- (UIImage*)convertToGRAY;
+- (UIImage*)convertToHSV;
 
 @end
