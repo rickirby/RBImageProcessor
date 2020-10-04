@@ -3,14 +3,14 @@
    LastUpgradeVersion = "1170"
    version = "1.7">
    <BuildAction
-      parallelizeBuildables = "YES"
+      parallelizeBuildables = "NO"
       buildImplicitDependencies = "YES">
       <PreActions>
          <ExecutionAction
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "opencv=${PROJECT_DIR}/Carthage/Build/iOS/opencv2.framework&#10;if [ ! -f &quot;$opencv&quot; ]; then&#10;     ${PROJECT_DIR}/Scripts/DownloadDependency.sh&#10;fi&#10;">
+               scriptText = "opencv=${PROJECT_DIR}/Carthage/Build/iOS/opencv2.framework&#10;if [ ! -d &quot;$opencv&quot; ]&#10;then&#10;#     ${PROJECT_DIR}/Scripts/DownloadDependency.sh&#10;&#9;echo &quot;\033[0;33mCreating \033[0;32mCarthage/Build/iOS \033[0;33mdirectory...&quot;&#10;    mkdir ${PROJECT_DIR}/Carthage&#10;    mkdir ${PROJECT_DIR}/Carthage/Build&#10;    mkdir ${PROJECT_DIR}/Carthage/Build/iOS&#10;    &#10;&#9;echo &quot;\033[0;33mDownloading \033[0;32mOpenCV \033[0;33mframework...&quot;&#10;&#9;curl -L https://sourceforge.net/projects/opencvlibrary/files/3.4.6/opencv-3.4.6-ios-framework.zip/download --output ${PROJECT_DIR}/Carthage/Build/iOS/opencv2_framework.zip&#10;&#9;unzip -q ${PROJECT_DIR}/Carthage/Build/iOS/opencv2_framework.zip -d ${PROJECT_DIR}/Carthage/Build/iOS&#10;&#9;rm ${PROJECT_DIR}/Carthage/Build/iOS/opencv2_framework.zip&#10;fi&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
