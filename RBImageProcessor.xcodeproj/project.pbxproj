@@ -18,24 +18,9 @@
 		DC44441225254FA300D19AF9 /* ConvertColorProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC44441025254FA300D19AF9 /* ConvertColorProcessor.cpp */; };
 		DC44441325254FA300D19AF9 /* ConvertColorProcessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = DC44441125254FA300D19AF9 /* ConvertColorProcessor.hpp */; };
 		DC4A7F7B252800340053370B /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC4118342523806000A38ED5 /* opencv2.framework */; };
-		DC4A7F7C252800340053370B /* opencv2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DC4118342523806000A38ED5 /* opencv2.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DC67E4442522C66F0037C91E /* RBImageProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = DC67E4422522C66F0037C91E /* RBImageProcessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DC67E44B2522C8FD0037C91E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DC67E44A2522C8FD0037C91E /* README.md */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		DC4A7F7D252800350053370B /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				DC4A7F7C252800340053370B /* opencv2.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		DC4118342523806000A38ED5 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = Carthage/Build/iOS/opencv2.framework; sourceTree = "<group>"; };
@@ -142,7 +127,6 @@
 				DC67E43B2522C66F0037C91E /* Sources */,
 				DC67E43C2522C66F0037C91E /* Frameworks */,
 				DC67E43D2522C66F0037C91E /* Resources */,
-				DC4A7F7D252800350053370B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
