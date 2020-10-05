@@ -3,11 +3,10 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DC4118352523806000A38ED5 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC4118342523806000A38ED5 /* opencv2.framework */; platformFilter = ios; };
 		DC41183D252383E700A38ED5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC41183C252383E700A38ED5 /* CoreGraphics.framework */; };
 		DC41183F252383F500A38ED5 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC41183E252383F500A38ED5 /* AssetsLibrary.framework */; };
 		DC411841252383FE00A38ED5 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC411840252383FE00A38ED5 /* CoreMedia.framework */; };
@@ -18,6 +17,7 @@
 		DC41184B252385C600A38ED5 /* ConvertColor.h in Headers */ = {isa = PBXBuildFile; fileRef = DC41184A252385C600A38ED5 /* ConvertColor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DC44441225254FA300D19AF9 /* ConvertColorProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC44441025254FA300D19AF9 /* ConvertColorProcessor.cpp */; };
 		DC44441325254FA300D19AF9 /* ConvertColorProcessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = DC44441125254FA300D19AF9 /* ConvertColorProcessor.hpp */; };
+		DC4A7F7B252800340053370B /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC4118342523806000A38ED5 /* opencv2.framework */; };
 		DC67E4442522C66F0037C91E /* RBImageProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = DC67E4422522C66F0037C91E /* RBImageProcessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DC67E44B2522C8FD0037C91E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DC67E44A2522C8FD0037C91E /* README.md */; };
 /* End PBXBuildFile section */
@@ -46,11 +46,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				DC4118452523841100A38ED5 /* Accelerate.framework in Frameworks */,
+				DC4A7F7B252800340053370B /* opencv2.framework in Frameworks */,
 				DC41183F252383F500A38ED5 /* AssetsLibrary.framework in Frameworks */,
 				DC4118432523840900A38ED5 /* CoreFoundation.framework in Frameworks */,
 				DC41183D252383E700A38ED5 /* CoreGraphics.framework in Frameworks */,
 				DC411841252383FE00A38ED5 /* CoreMedia.framework in Frameworks */,
-				DC4118352523806000A38ED5 /* opencv2.framework in Frameworks */,
 				DC4118472523844600A38ED5 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -324,6 +324,7 @@
 				);
 				INFOPLIST_FILE = RBImageProcessor/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -333,7 +334,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = id.erbe.core.RBImageProcessor;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -352,6 +354,7 @@
 				);
 				INFOPLIST_FILE = RBImageProcessor/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -361,7 +364,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = id.erbe.core.RBImageProcessor;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
