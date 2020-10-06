@@ -31,4 +31,11 @@ using namespace cv;
 	return MatToUIImage(ConvertColorProcessor::convertToHSV(opencvImage));
 }
 
++ (UIImage *)convertToBWwithImage:(UIImage *)image {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(ConvertColorProcessor::convertToBW(opencvImage));
+}
+
 @end

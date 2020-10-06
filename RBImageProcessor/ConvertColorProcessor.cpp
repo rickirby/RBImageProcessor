@@ -21,3 +21,11 @@ Mat ConvertColorProcessor::convertToHSV(Mat image) {
 	
 	return hsv;
 }
+
+Mat ConvertColorProcessor::convertToBW(Mat image) {
+	Mat bw;
+	Mat gray = convertToGRAY(image);
+	threshold(gray, bw, 0, 255, THRESH_OTSU);
+	
+	return bw;
+}

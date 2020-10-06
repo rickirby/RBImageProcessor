@@ -14,5 +14,6 @@
 
 + (UIImage *_Nonnull)convertToGRAYwithImage:(UIImage *_Nonnull)image;
 + (UIImage *_Nonnull)convertToHSVwithImage:(UIImage *_Nonnull)image;
++ (UIImage *_Nonnull)convertToBWwithImage:(UIImage *_Nonnull)image;
 
 @end
