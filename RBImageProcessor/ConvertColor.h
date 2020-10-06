@@ -12,8 +12,8 @@
 
 @interface ConvertColor : NSObject
 
-+ (UIImage *_Nonnull)convertToGRAYwithImage:(UIImage *_Nonnull)image;
-+ (UIImage *_Nonnull)convertToHSVwithImage:(UIImage *_Nonnull)image;
-+ (UIImage *_Nonnull)convertToBWwithImage:(UIImage *_Nonnull)image;
++ (UIImage *_Nonnull)makeGrayFromImage:(UIImage *_Nonnull)image;
++ (UIImage *_Nonnull)makeHSVFromImage:(UIImage *_Nonnull)image;
++ (UIImage *_Nonnull)makeBWFromImage:(UIImage *_Nonnull)image;
 
 @end

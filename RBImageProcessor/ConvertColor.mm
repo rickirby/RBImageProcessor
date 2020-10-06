@@ -17,21 +17,21 @@ using namespace cv;
 
 @implementation ConvertColor
 
-+ (UIImage *)convertToGRAYwithImage:(UIImage *)image {
++ (UIImage *)makeGrayFromImage:(UIImage *)image {
 	Mat opencvImage;
 	UIImageToMat(image, opencvImage);
 	
 	return MatToUIImage(ConvertColorProcessor::convertToGRAY(opencvImage));
 }
 
-+ (UIImage *)convertToHSVwithImage:(UIImage *)image {
++ (UIImage *)makeHSVFromImage:(UIImage *)image {
 	Mat opencvImage;
 	UIImageToMat(image, opencvImage);
 	
 	return MatToUIImage(ConvertColorProcessor::convertToHSV(opencvImage));
 }
 
-+ (UIImage *)convertToBWwithImage:(UIImage *)image {
++ (UIImage *)makeBWFromImage:(UIImage *)image {
 	Mat opencvImage;
 	UIImageToMat(image, opencvImage);
 	
