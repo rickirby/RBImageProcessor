@@ -16,18 +16,11 @@ using namespace cv;
 
 class ConvertColorProcessor {
 public:
-	// Constructor
-	ConvertColorProcessor(Mat);
 	
-	// Destructor
-	~ConvertColorProcessor();
-	
-	// Method
-	Mat convertToGRAY();
-	Mat convertToHSV();
-	
-private:
-	Mat _image;
+	static Mat convertToGRAY(Mat image);
+	static Mat convertToHSV(Mat image);
+	static Mat convertToBW(Mat image);
+
 };
 
 #endif /* ConvertColorProcessor_hpp */
