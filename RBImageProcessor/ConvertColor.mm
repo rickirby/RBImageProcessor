@@ -15,26 +15,20 @@
 using namespace std;
 using namespace cv;
 
-@implementation ConvertColor {
-	ConvertColorProcessor *_convertColorProcessor;
-}
+@implementation ConvertColor
 
-- (instancetype)initWithImage:(UIImage*)image {
-	if ((self = [super init])) {
-		Mat opencvImage;
-		UIImageToMat(image, opencvImage);
-		_convertColorProcessor = new ConvertColorProcessor(opencvImage);
-	}
++ (UIImage *)convertToGRAYwithImage:(UIImage *)image {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
 	
-	return self;
+	return MatToUIImage(ConvertColorProcessor::convertToGRAY(opencvImage));
 }
 
-- (UIImage *)convertToGRAY {
-	return MatToUIImage(_convertColorProcessor->convertToGRAY());
-}
-
-- (UIImage *)convertToHSV {
-	return MatToUIImage(_convertColorProcessor->convertToHSV());
++ (UIImage *)convertToHSVwithImage:(UIImage *)image {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(ConvertColorProcessor::convertToHSV(opencvImage));
 }
 
 @end
