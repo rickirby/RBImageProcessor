@@ -8,24 +8,24 @@
 
 #include "ConvertColorProcessor.hpp"
 
-ConvertColorProcessor::ConvertColorProcessor(Mat image) {
-	_image = image;
-}
-
-ConvertColorProcessor::~ConvertColorProcessor() {
-	
-}
-
-Mat ConvertColorProcessor::convertToGRAY() {
+Mat ConvertColorProcessor::convertToGRAY(Mat image) {
 	Mat gray;
-    cvtColor(_image, gray, COLOR_BGR2GRAY);
-    
-    return gray;
+	cvtColor(image, gray, COLOR_BGR2GRAY);
+	
+	return gray;
 }
 
-Mat ConvertColorProcessor::convertToHSV() {
+Mat ConvertColorProcessor::convertToHSV(Mat image) {
 	Mat hsv;
-    cvtColor(_image, hsv, COLOR_BGR2HSV);
+	cvtColor(image, hsv, COLOR_BGR2HSV);
 	
-    return hsv;
+	return hsv;
+}
+
+Mat ConvertColorProcessor::convertToBW(Mat image) {
+	Mat bw;
+	Mat gray = convertToGRAY(image);
+	threshold(gray, bw, 0, 255, THRESH_OTSU);
+	
+	return bw;
 }
