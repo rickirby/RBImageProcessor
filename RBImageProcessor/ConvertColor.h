@@ -15,5 +15,6 @@
 + (UIImage *_Nonnull)makeGrayFromImage:(UIImage *_Nonnull)image;
 + (UIImage *_Nonnull)makeHSVFromImage:(UIImage *_Nonnull)image;
 + (UIImage *_Nonnull)makeBWFromImage:(UIImage *_Nonnull)image;
++ (UIImage *_Nonnull)adaptiveThresholdFromImage:(UIImage *_Nonnull)image isGaussian:(BOOL)isGaussian blockSize:(NSInteger)blockSize constant:(double)constant;
 
 @end

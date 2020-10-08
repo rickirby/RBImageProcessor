@@ -38,4 +38,11 @@ using namespace cv;
 	return MatToUIImage(ConvertColorProcessor::convertToBW(opencvImage));
 }
 
++ (UIImage *)adaptiveThresholdFromImage:(UIImage *)image isGaussian:(BOOL)isGaussian blockSize:(NSInteger)blockSize constant:(double)constant {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(ConvertColorProcessor::adaptiveThreshold(opencvImage, isGaussian, (int) blockSize, constant));
+}
+
 @end
