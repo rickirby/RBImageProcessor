@@ -29,3 +29,10 @@ Mat ConvertColorProcessor::convertToBW(Mat image) {
 	
 	return bw;
 }
+
+Mat ConvertColorProcessor::adaptiveThreshold(Mat image, bool isGaussian, int blockSize, double constant) {
+	Mat gray = convertToGRAY(image), result;
+	cv::adaptiveThreshold(gray, result, 255, isGaussian ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, blockSize, constant);
+	
+	return result;
+}

@@ -20,6 +20,7 @@ public:
 	static Mat convertToGRAY(Mat image);
 	static Mat convertToHSV(Mat image);
 	static Mat convertToBW(Mat image);
+	static Mat adaptiveThreshold(Mat image, bool isGaussian, int blockSize, double constant);
 
 };
 
