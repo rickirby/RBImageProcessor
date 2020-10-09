@@ -36,3 +36,10 @@ Mat ConvertColorProcessor::adaptiveThreshold(Mat image, bool isGaussian, int blo
 	
 	return result;
 }
+
+Mat ConvertColorProcessor::dilate(Mat image, int iteration) {
+	Mat result;
+	cv::dilate(image, result, Mat(), Point(-1, -1), iteration);
+	
+	return result;
+}
