@@ -45,4 +45,11 @@ using namespace cv;
 	return MatToUIImage(ConvertColorProcessor::adaptiveThreshold(opencvImage, isGaussian, (int) blockSize, constant));
 }
 
++ (UIImage *)dilateFromImage:(UIImage *)image iteration:(NSInteger)iteration isGaussian:(BOOL)isGaussian adaptiveBlockSize:(NSInteger)blockSize adaptiveConstant:(double)constant {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(ConvertColorProcessor::dilate(opencvImage, (int) iteration, isGaussian, (int) blockSize, constant));
+}
+
 @end
