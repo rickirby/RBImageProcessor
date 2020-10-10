@@ -52,4 +52,11 @@ using namespace cv;
 	return MatToUIImage(ConvertColorProcessor::dilate(opencvImage, (int) iteration, isGaussian, (int) blockSize, constant));
 }
 
++ (UIImage *)erodeFromImage:(UIImage *)image erodeIteration:(NSInteger)erodeIteration dilateIteration:(NSInteger)dilateIteration isGaussian:(BOOL)isGaussian adaptiveBlockSize:(NSInteger)blockSize adaptiveConstant:(double)constant {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(ConvertColorProcessor::erode(opencvImage, (int) erodeIteration, (int) dilateIteration, isGaussian, (int) blockSize, constant));
+}
+
 @end
