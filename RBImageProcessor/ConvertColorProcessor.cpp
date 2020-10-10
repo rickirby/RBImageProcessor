@@ -46,3 +46,13 @@ Mat ConvertColorProcessor::dilate(Mat image, int iteration, bool isGaussian, int
 	
 	return result;
 }
+
+Mat ConvertColorProcessor::erode(Mat image, int erodeIteration, int dilateIteration, bool isGaussian, int blockSize, double constant) {
+	Mat gray, adaptiveImage, dilateImage, result;
+	cv::cvtColor(image, gray, COLOR_BGR2GRAY);
+	cv::adaptiveThreshold(gray, adaptiveImage, 255, isGaussian ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, blockSize, constant);
+	cv::dilate(adaptiveImage, dilateImage, Mat(), Point(-1, -1), dilateIteration);
+	cv::erode(dilateImage, result, Mat(), Point(-1, -1), erodeIteration);
+	
+	return result;
+}
