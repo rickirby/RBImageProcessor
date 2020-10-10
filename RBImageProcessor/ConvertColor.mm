@@ -38,4 +38,25 @@ using namespace cv;
 	return MatToUIImage(ConvertColorProcessor::convertToBW(opencvImage));
 }
 
++ (UIImage *)adaptiveThresholdFromImage:(UIImage *)image isGaussian:(BOOL)isGaussian blockSize:(NSInteger)blockSize constant:(double)constant {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(ConvertColorProcessor::adaptiveThreshold(opencvImage, isGaussian, (int) blockSize, constant));
+}
+
++ (UIImage *)dilateFromImage:(UIImage *)image iteration:(NSInteger)iteration isGaussian:(BOOL)isGaussian adaptiveBlockSize:(NSInteger)blockSize adaptiveConstant:(double)constant {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(ConvertColorProcessor::dilate(opencvImage, (int) iteration, isGaussian, (int) blockSize, constant));
+}
+
++ (UIImage *)erodeFromImage:(UIImage *)image erodeIteration:(NSInteger)erodeIteration dilateIteration:(NSInteger)dilateIteration isGaussian:(BOOL)isGaussian adaptiveBlockSize:(NSInteger)blockSize adaptiveConstant:(double)constant {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(ConvertColorProcessor::erode(opencvImage, (int) erodeIteration, (int) dilateIteration, isGaussian, (int) blockSize, constant));
+}
+
 @end
