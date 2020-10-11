@@ -20,6 +20,9 @@ public:
 	static Mat convertToGRAY(Mat image);
 	static Mat convertToHSV(Mat image);
 	static Mat convertToBW(Mat image);
+	static Mat adaptiveThreshold(Mat image, bool isGaussian, int blockSize, double constant);
+	static Mat dilate(Mat image, int iteration, bool isGaussian, int blockSize, double constant);
+	static Mat erode(Mat image, int erodeIteration, int dilateIteration, bool isGaussian, int blockSize, double constant);
 
 };
 
