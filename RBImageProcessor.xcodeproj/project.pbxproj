@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0981C87C257E75E600D8A7E4 /* ReadDotProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0981C87A257E75E600D8A7E4 /* ReadDotProcessor.cpp */; };
+		0981C87D257E75E600D8A7E4 /* ReadDotProcessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0981C87B257E75E600D8A7E4 /* ReadDotProcessor.hpp */; };
 		DC41183D252383E700A38ED5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC41183C252383E700A38ED5 /* CoreGraphics.framework */; };
 		DC41183F252383F500A38ED5 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC41183E252383F500A38ED5 /* AssetsLibrary.framework */; };
 		DC411841252383FE00A38ED5 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC411840252383FE00A38ED5 /* CoreMedia.framework */; };
@@ -23,6 +25,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0981C87A257E75E600D8A7E4 /* ReadDotProcessor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ReadDotProcessor.cpp; sourceTree = "<group>"; };
+		0981C87B257E75E600D8A7E4 /* ReadDotProcessor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ReadDotProcessor.hpp; sourceTree = "<group>"; };
 		DC4118342523806000A38ED5 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = Carthage/Build/iOS/opencv2.framework; sourceTree = "<group>"; };
 		DC41183C252383E700A38ED5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		DC41183E252383F500A38ED5 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -98,6 +102,8 @@
 				DC411848252385B800A38ED5 /* ConvertColor.mm */,
 				DC44441025254FA300D19AF9 /* ConvertColorProcessor.cpp */,
 				DC44441125254FA300D19AF9 /* ConvertColorProcessor.hpp */,
+				0981C87A257E75E600D8A7E4 /* ReadDotProcessor.cpp */,
+				0981C87B257E75E600D8A7E4 /* ReadDotProcessor.hpp */,
 				DC67E4432522C66F0037C91E /* Info.plist */,
 			);
 			path = RBImageProcessor;
@@ -111,6 +117,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DC41184B252385C600A38ED5 /* ConvertColor.h in Headers */,
+				0981C87D257E75E600D8A7E4 /* ReadDotProcessor.hpp in Headers */,
 				DC44441325254FA300D19AF9 /* ConvertColorProcessor.hpp in Headers */,
 				DC67E4442522C66F0037C91E /* RBImageProcessor.h in Headers */,
 			);
@@ -185,6 +192,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0981C87C257E75E600D8A7E4 /* ReadDotProcessor.cpp in Sources */,
 				DC44441225254FA300D19AF9 /* ConvertColorProcessor.cpp in Sources */,
 				DC411849252385B800A38ED5 /* ConvertColor.mm in Sources */,
 			);
