@@ -9,10 +9,13 @@
 #ifndef ReadDotProcessor_hpp
 #define ReadDotProcessor_hpp
 
+#include <iostream>
 #include <stdio.h>
+#include <stdlib.h>
 #include <opencv2/opencv.hpp>
 
 using namespace cv;
+using namespace std;
 
 class ReadDotProcessor {
 public:
@@ -24,7 +27,7 @@ public:
 	
 	// MARK: - Public Methods
 	
-	void blobAnalysis();
+	Mat blobAnalysis(Mat image);
 	
 private:
 	
