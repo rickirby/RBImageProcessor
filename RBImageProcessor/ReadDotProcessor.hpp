@@ -28,6 +28,7 @@ public:
 	// MARK: - Public Methods
 	
 	Mat blobAnalysis(Mat image);
+	Mat lineCoordinate(Mat image);
 	
 private:
 	
