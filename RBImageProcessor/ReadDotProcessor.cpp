@@ -237,6 +237,68 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 		cout << " Area: " << contourArea(filteredContours[i]) << endl;
 	}
 	
+	vector<Point> coordinatePoint = centerContoursPoint;
+	vector<vector<int>> colsGroup;
+	vector<vector<int>> rowsGroup;
+	
+	for (unsigned int i = 0; i < coordinatePoint.size(); i++) {
+		
+		vector<int> gotCols;
+		vector<int> gotRows;
+		
+		if (coordinatePoint[i].x != -1) {
+			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
+				cout << i << "," << j << "=" << coordinatePoint[j] << endl;
+				if (coordinatePoint[j].x != -1) {
+					if (j == i) {
+						cout << "asign new value " << coordinatePoint[j] << endl;
+						gotCols.push_back(coordinatePoint[j].x);
+						coordinatePoint[j].x = -1;
+					} else {
+						cout << "comparing value " << endl;
+						if (abs(gotCols[0] - coordinatePoint[j].x) < 10) {
+							gotCols.push_back(coordinatePoint[j].x);
+							coordinatePoint[j].x = -1;
+						}
+					}
+				}
+			}
+			
+			colsGroup.push_back(gotCols);
+		}
+		
+		if (coordinatePoint[i].y != -1) {
+			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
+				cout << i << "," << j << "=" << coordinatePoint[j] << endl;
+				if (coordinatePoint[j].y != -1) {
+					if (j == i) {
+						cout << "asign new value " << coordinatePoint[j] << endl;
+						gotRows.push_back(coordinatePoint[j].y);
+						coordinatePoint[j].y = -1;
+					} else {
+						cout << "comparing value " << endl;
+						if (abs(gotRows[0] - coordinatePoint[j].y) < 10) {
+							gotRows.push_back(coordinatePoint[j].y);
+							coordinatePoint[j].y = -1;
+						}
+					}
+				}
+			}
+			
+			rowsGroup.push_back(gotRows);
+		}
+		
+	}
+	
+	cout << "=== colsGroup and rowsGroup debugging" << endl;
+	
+	for (unsigned int i = 0; i < coordinatePoint.size(); i++) {
+		cout << "coordinatePoint index " << i << " = " << coordinatePoint[i] << endl;
+	}
+	
+	cout << "=== colsGroupSize = " << colsGroup.size() << endl;
+	cout << "=== rowsGroupSize = " << rowsGroup.size() << endl;
+	
 	erodeImage = Scalar::all(0);
 	
 	for (unsigned int i = 0; i < centerContoursPoint.size(); i++) {
