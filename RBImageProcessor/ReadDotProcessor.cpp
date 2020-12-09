@@ -47,7 +47,8 @@ Mat ReadDotProcessor::blobAnalysis(Mat image) {
 	cout << "=== filtering contours" << endl;
 	
 	for (int i = 0; i < contours.size(); i++) {
-		if (contourArea(contours[i]) > 200.0) {
+		double currentArea = contourArea(contours[i]);
+		if ((currentArea > 200.0) && (currentArea < 500.0)) {
 			filteredContours.push_back(contours[i]);
 		}
 	}
