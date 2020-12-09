@@ -6,8 +6,14 @@
 //  Copyright © 2020 Ricki Bin Yamin. All rights reserved.
 //
 
-#ifndef ReadDot_h
-#define ReadDot_h
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 
-#endif /* ReadDot_h */
+@interface ReadDot : NSObject
+
+- (instancetype _Nonnull)initWithAdaptiveType:(BOOL)adaptiveType adaptiveBlockSize:(NSInteger)adaptiveBlockSize adaptiveConstant:(double)adaptiveConstant dilateIteration:(NSInteger)dilateIteration erodeIteration:(NSInteger)erodeIteration;
+
+- (UIImage *_Nonnull)blobAnalysisFromImage:(UIImage *_Nonnull)image;
+
+@end
