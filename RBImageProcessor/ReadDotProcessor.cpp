@@ -42,16 +42,31 @@ Mat ReadDotProcessor::blobAnalysis(Mat image) {
 	
 	findContours(erodeImage, contours, noArray(), RETR_LIST, CHAIN_APPROX_SIMPLE);
 	
-	int count = 0;
+	vector<vector<Point>> filteredContours;
+
+	cout << "=== filtering contours" << endl;
 	
 	for (int i = 0; i < contours.size(); i++) {
-		if (contours[i].size() < 5) {
-			count++;
+		if (contourArea(contours[i]) > 200.0) {
+			filteredContours.push_back(contours[i]);
 		}
 	}
 	
+	cout << "=== eliminating " << contours.size() - filteredContours.size() << " contours" << endl;
+	
+	cout << "=== findContours debugging" << endl;
+	
+	for (unsigned int i = 0;  i < filteredContours.size();  i++) {
+		cout << "# Index: " << i << ", points count: " << filteredContours[i].size() << endl;
+		for (unsigned int j=0;  j < filteredContours[i].size();  j++) {
+			cout << "Point(x,y)=" << filteredContours[i][j] << endl;
+		}
+		
+		cout << " Area: " << contourArea(filteredContours[i]) << std::endl;
+	}
+	
 	erodeImage = Scalar::all(0);
-	drawContours(erodeImage, contours, -1, Scalar::all(128));
+	drawContours(erodeImage, filteredContours, -1, Scalar::all(255));
 	
 	return erodeImage;
 }
