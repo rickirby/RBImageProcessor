@@ -151,7 +151,10 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 	}
 	
 	erodeImage = Scalar::all(0);
-	drawContours(erodeImage, filteredContours, -1, Scalar::all(255));
+	
+	for (unsigned int i = 0; i < centerContoursPoint.size(); i++) {
+		circle(erodeImage, centerContoursPoint[i], 10, Scalar::all(255), -1);
+	}
 	
 	return erodeImage;
 }
