@@ -41,6 +41,15 @@ Mat ReadDotProcessor::blobAnalysis(Mat image) {
 	// Blob Analysis
 	
 	findContours(erodeImage, contours, noArray(), RETR_LIST, CHAIN_APPROX_SIMPLE);
+	
+	int count = 0;
+	
+	for (int i = 0; i < contours.size(); i++) {
+		if (contours[i].size() < 5) {
+			count++;
+		}
+	}
+	
 	erodeImage = Scalar::all(0);
 	drawContours(erodeImage, contours, -1, Scalar::all(128));
 	
