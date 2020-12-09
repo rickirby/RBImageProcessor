@@ -109,10 +109,10 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 			cout << "Point(x,y)=" << filteredContours[i][j] << endl;
 		}
 		
-		cout << " Area: " << contourArea(filteredContours[i]) << std::endl;
+		cout << " Area: " << contourArea(filteredContours[i]) << endl;
 	}
 	
-	// Finding min max coordinate per dot
+	// Finding min max coordinate per dot and average them to get center point
 	
 	vector<Point> centerContoursPoint;
 	
@@ -136,6 +136,18 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 		
 		Point2i centerPoint(centerX, centerY);
 		centerContoursPoint.push_back(centerPoint);
+	}
+	
+	cout << "=== centerPoint debugging" << endl;
+	
+	for (unsigned int i = 0;  i < filteredContours.size();  i++) {
+		cout << "# Index: " << i << ", points count: " << filteredContours[i].size() << endl;
+		for (unsigned int j = 0;  j < filteredContours[i].size();  j++) {
+			cout << "Point(x,y)=" << filteredContours[i][j] << endl;
+		}
+		
+		cout << " Center: " << centerContoursPoint[i] << endl;
+		cout << " Area: " << contourArea(filteredContours[i]) << endl;
 	}
 	
 	erodeImage = Scalar::all(0);
