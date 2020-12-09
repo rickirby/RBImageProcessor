@@ -27,10 +27,17 @@ ReadDotProcessor::~ReadDotProcessor() {
 }
 
 Mat ReadDotProcessor::blobAnalysis(Mat image) {
-	Mat output;
-	vector<vector<Point>> contours;
-	findContours(image, contours, noArray(), RETR_LIST, CHAIN_APPROX_SIMPLE);
-	drawContours(output, contours, -1, Scalar::all(128));
 	
-	return output;
+	Mat gray, adaptiveImage, dilateImage, erodeImage, result;
+	vector<vector<Point>> contours;
+	
+	cvtColor(image, gray, COLOR_BGR2GRAY);
+	adaptiveThreshold(gray, adaptiveImage, 255, _adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, _adaptiveBlockSize, _adaptiveConstant);
+	dilate(adaptiveImage, dilateImage, Mat(), Point(-1, -1), _dilateIteration);
+	erode(dilateImage, erodeImage, Mat(), Point(-1, -1), _erodeIteration);
+	
+	findContours(erodeImage, contours, noArray(), RETR_LIST, CHAIN_APPROX_SIMPLE);
+	drawContours(result, contours, -1, Scalar::all(128));
+	
+	return result;
 }
