@@ -371,5 +371,7 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 		line(erodeImage, startPointRow, endPointRow, Scalar::all(128));
 	}
 	
+	// TODO: or may be, the line should be drawn from edge of dot to end edge. to handle missing rotation, instead of getting the average and draw it
+	
 	return erodeImage;
 }
