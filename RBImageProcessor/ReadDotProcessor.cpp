@@ -301,6 +301,10 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 		
 	}
 	
+	// Sorting colsGroupAvg and rowsGroupAvg
+	sort(colsGroupAvg.begin(), colsGroupAvg.end());
+	sort(rowsGroupAvg.begin(), rowsGroupAvg.end());
+	
 	cout << "=== colsGroup and rowsGroup debugging" << endl;
 	
 	for (unsigned int i = 0; i < coordinatePoint.size(); i++) {
