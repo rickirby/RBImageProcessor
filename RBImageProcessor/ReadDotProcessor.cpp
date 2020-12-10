@@ -286,7 +286,6 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 						coordinatePoint[j].y = -1;
 					} else {
 //						cout << "comparing value " << endl;
-						// TODO: try to compare with average value that has got, not first item, also on cols
 						if (abs(avgY - coordinatePoint[j].y) < 20) {
 							gotRows.push_back(coordinatePoint[j].y);
 							avgY = (avgY + coordinatePoint[j].y)/2;
