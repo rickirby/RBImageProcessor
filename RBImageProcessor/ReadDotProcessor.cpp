@@ -297,6 +297,18 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 		cout << "coordinatePoint index " << i << " = " << coordinatePoint[i] << endl;
 	}
 	
+	for (unsigned int i = 0; i < colsGroup.size(); i++) {
+		for (unsigned j = 0; j < colsGroup[i].size(); j++) {
+			cout << "colsGroup index " << i << "," << j << " = " << colsGroup[i][j] << endl;
+		}
+	}
+	
+	for (unsigned int i = 0; i < rowsGroup.size(); i++) {
+		for (unsigned j = 0; j < rowsGroup[i].size(); j++) {
+			cout << "rowsGroup index " << i << "," << j << " = " << rowsGroup[i][j] << endl;
+		}
+	}
+	
 	cout << "=== colsGroupSize = " << colsGroup.size() << endl;
 	cout << "=== rowsGroupSize = " << rowsGroup.size() << endl;
 	
@@ -306,21 +318,33 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 	vector<int> rowsGroupAverage;
 	
 	for (unsigned int i = 0; i < colsGroup.size(); i++) {
-		int sum = 0;
+		int avg = colsGroup[i][0];
 		for (unsigned int j = 0; j < colsGroup.size(); j++) {
-			sum += colsGroup[i][j];
+			avg = (avg + colsGroup[i][j]) / 2;
 		}
 		
-		colsGroupAverage.push_back(sum / colsGroup.size());
+		colsGroupAverage.push_back(avg);
 	}
 	
 	for (unsigned int i = 0; i < rowsGroup.size(); i++) {
-		int sum = 0;
+		int avg = rowsGroup[i][0];
 		for (unsigned int j = 0; j < rowsGroup.size(); j++) {
-			sum += rowsGroup[i][j];
+			avg = (avg + rowsGroup[i][j]) / 2;
 		}
 		
-		rowsGroupAverage.push_back(sum / colsGroup.size());
+		rowsGroupAverage.push_back(avg);
+	}
+	
+	cout << "=== colsGroupAverage debugging" << endl;
+	
+	for (unsigned int i = 0; i < colsGroupAverage.size(); i++) {
+		cout << "rowsGroupAverage index: " << i << " = " << colsGroupAverage[i] << endl;
+	}
+	
+	cout << "=== rowsGroupAverage debugging" << endl;
+	
+	for (unsigned int i = 0; i < rowsGroupAverage.size(); i++) {
+		cout << "rowsGroupAverage index: " << i << " = " << rowsGroupAverage[i] << endl;
 	}
 	
 	erodeImage = Scalar::all(0);
@@ -331,18 +355,18 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 	
 	// Drawing line
 	
-	for (unsigned int i = 0; i < colsGroupAverage.size(); i++) {
+	for (unsigned int i = 0; i < colsGroup.size(); i++) {
 
-		Point2i startPointCol(colsGroupAverage[i], 0);
-		Point2i endPointCol(colsGroupAverage[i], erodeImage.rows);
+		Point2i startPointCol(colsGroup[i][0], 0);
+		Point2i endPointCol(colsGroup[i][0], erodeImage.rows);
 		
 		line(erodeImage, startPointCol, endPointCol, Scalar::all(128));
 	}
 	
-	for (unsigned int i = 0; i < rowsGroupAverage.size(); i++) {
+	for (unsigned int i = 0; i < rowsGroup.size(); i++) {
 		
-		Point2i startPointRow(0, rowsGroupAverage[i]);
-		Point2i endPointRow(erodeImage.cols, rowsGroupAverage[i]);
+		Point2i startPointRow(0, rowsGroup[i][0]);
+		Point2i endPointRow(erodeImage.cols, rowsGroup[i][0]);
 		
 		line(erodeImage, startPointRow, endPointRow, Scalar::all(128));
 	}
