@@ -240,11 +240,16 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 	vector<Point> coordinatePoint = centerContoursPoint;
 	vector<vector<int>> colsGroup;
 	vector<vector<int>> rowsGroup;
+	vector<int> colsGroupAvg;
+	vector<int> rowsGroupAvg;
 	
 	for (unsigned int i = 0; i < coordinatePoint.size(); i++) {
 		
 		vector<int> gotCols;
 		vector<int> gotRows;
+		
+		unsigned int avgX = 0;
+		unsigned int avgY = 0;
 		
 		if (coordinatePoint[i].x != -1) {
 			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
@@ -253,11 +258,13 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 					if (j == i) {
 						cout << "asign new value " << coordinatePoint[j] << endl;
 						gotCols.push_back(coordinatePoint[j].x);
+						avgX = coordinatePoint[j].x;
 						coordinatePoint[j].x = -1;
 					} else {
 						cout << "comparing value " << endl;
-						if (abs(gotCols[0] - coordinatePoint[j].x) < 20) {
+						if (abs(avgX - coordinatePoint[j].x) < 20) {
 							gotCols.push_back(coordinatePoint[j].x);
+							avgX = (avgX + coordinatePoint[j].x)/2;
 							coordinatePoint[j].x = -1;
 						}
 					}
@@ -265,6 +272,7 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 			}
 			
 			colsGroup.push_back(gotCols);
+			colsGroupAvg.push_back(avgX);
 		}
 		
 		if (coordinatePoint[i].y != -1) {
@@ -274,12 +282,14 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 					if (j == i) {
 						cout << "asign new value " << coordinatePoint[j] << endl;
 						gotRows.push_back(coordinatePoint[j].y);
+						avgY = coordinatePoint[j].y;
 						coordinatePoint[j].y = -1;
 					} else {
 						cout << "comparing value " << endl;
 						// TODO: try to compare with average value that has got, not first item, also on cols
-						if (abs(gotRows[0] - coordinatePoint[j].y) < 20) {
+						if (abs(avgY - coordinatePoint[j].y) < 20) {
 							gotRows.push_back(coordinatePoint[j].y);
+							avgY = (avgY + coordinatePoint[j].y)/2;
 							coordinatePoint[j].y = -1;
 						}
 					}
@@ -287,6 +297,7 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 			}
 			
 			rowsGroup.push_back(gotRows);
+			rowsGroupAvg.push_back(avgY);
 		}
 		
 	}
@@ -307,6 +318,16 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 		for (unsigned j = 0; j < rowsGroup[i].size(); j++) {
 			cout << "rowsGroup index " << i << "," << j << " = " << rowsGroup[i][j] << endl;
 		}
+	}
+	
+	cout << "colsGroupAvg and rowsGroupAvg debugging" << endl;
+	
+	for (unsigned int i = 0; i < colsGroupAvg.size(); i++) {
+		cout << "colsGroupAvg index: " << i << " = " << colsGroupAvg[i] << endl;
+	}
+	
+	for (unsigned int i = 0; i < rowsGroupAvg.size(); i++) {
+		cout << "rowsGroupAvg index: " << i << " = " << rowsGroupAvg[i] << endl;
 	}
 	
 	cout << "=== colsGroupSize = " << colsGroup.size() << endl;
