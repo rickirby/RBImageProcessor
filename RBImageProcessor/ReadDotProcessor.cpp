@@ -336,6 +336,8 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 	cout << "=== colsGroupSize = " << colsGroup.size() << endl;
 	cout << "=== rowsGroupSize = " << rowsGroup.size() << endl;
 	
+	// TODO: - use linefitting to get slope of each colsGroup and rowsGroup. If slope known, average the slope, then use it to get to know the inclination rotation of document
+	
 	erodeImage = Scalar::all(0);
 	
 	for (unsigned int i = 0; i < centerContoursPoint.size(); i++) {
