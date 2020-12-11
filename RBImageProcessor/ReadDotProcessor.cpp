@@ -343,30 +343,82 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 	vector<vector<int>> colsPairs;
 	vector<vector<int>> rowsPairs;
 	
-	for (unsigned int i = 0; i < colsGroupAvg.size() - 1; i++) {
+	bool shouldSkip = false;
+	int shouldSkipCount = 0;
+	
+	for (unsigned int i = 0; i < colsGroupAvg.size(); i++) {
 		vector<int> colPair;
 		
-		if (abs(colsGroupAvg[i] - colsGroupAvg[i + 1]) < 40) {
-			colPair.push_back(colsGroupAvg[i]);
-			colPair.push_back(colsGroupAvg[i + 1]);
-			
-			colsPairs.push_back(colPair);
-		} else {
-			if (i == 0) {
-				// case for single coordinate found on very first document
-				colPair.push_back(colsGroupAvg[i] - 30);
+		if (!shouldSkip) {
+			if ((abs(colsGroupAvg[i] - colsGroupAvg[i + 1]) < 40) && (i < colsGroupAvg.size() - 1)) {
 				colPair.push_back(colsGroupAvg[i]);
+				colPair.push_back(colsGroupAvg[i + 1]);
 				
-				colsPairs.push_back(colPair);
-			} else if (i == colsGroupAvg.size() - 1) {
-				// case for single coordinate found on very end of document
-				colPair.push_back(colsGroupAvg[i]);
-				colPair.push_back(colsGroupAvg[i] + 30);
-				
+				shouldSkip = true;
 				colsPairs.push_back(colPair);
 			} else {
-				// case for single line found beetween the other pairs
-				cout << "not found " << i << endl;
+				if (i == 0) {
+					// case for single coordinate found on very first document
+					colPair.push_back(colsGroupAvg[i] - 30);
+					colPair.push_back(colsGroupAvg[i]);
+					
+					shouldSkip = true;
+					colsPairs.push_back(colPair);
+				} else if (i == colsGroupAvg.size() - 1) {
+					// case for single coordinate found on very end of document
+					colPair.push_back(colsGroupAvg[i]);
+					colPair.push_back(colsGroupAvg[i] + 30);
+					
+					colsPairs.push_back(colPair);
+				} else {
+					// case for single line found beetween the other pairs
+					cout << "not found " << i << endl;
+				}
+			}
+		} else {
+			shouldSkip = false;
+		}
+	}
+	
+	shouldSkip = false;
+	
+	for (unsigned int i = 0; i < rowsGroupAvg.size(); i++) {
+		vector<int> rowPair;
+		
+		if (shouldSkipCount == 0) {
+			if ((abs(rowsGroupAvg[i] - rowsGroupAvg[i + 1]) < 40) && (i < rowsGroupAvg.size() - 2)) {
+				rowPair.push_back(rowsGroupAvg[i]);
+				rowPair.push_back(rowsGroupAvg[i + 1]);
+				rowPair.push_back(rowsGroupAvg[i + 2]);
+				
+				shouldSkipCount++;
+				rowsPairs.push_back(rowPair);
+			} else {
+				if (i == 0) {
+					// case for single coordinate found on very first document
+					rowPair.push_back(rowsGroupAvg[i] - 60);
+					rowPair.push_back(rowsGroupAvg[i] - 30);
+					rowPair.push_back(rowsGroupAvg[i]);
+					
+					shouldSkipCount++;
+					rowsPairs.push_back(rowPair);
+				} else if (i == rowsGroupAvg.size() - 1) {
+					// case for single coordinate found on very end of document
+					rowPair.push_back(rowsGroupAvg[i]);
+					rowPair.push_back(rowsGroupAvg[i] + 30);
+					rowPair.push_back(rowsGroupAvg[i] + 60);
+					
+					rowsPairs.push_back(rowPair);
+				} else {
+					// case for single line found beetween the other pairs
+					cout << "not found " << i << endl;
+				}
+			}
+		} else {
+			if (shouldSkipCount > 1) {
+				shouldSkipCount = 0;
+			} else {
+				shouldSkipCount++;
 			}
 		}
 	}
@@ -375,6 +427,14 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 		cout << "colsPairs " << i << " = ";
 		for (unsigned int j = 0; j < colsPairs[i].size(); j++) {
 			cout << colsPairs[i][j] << " ";
+		}
+		cout << endl;
+	}
+	
+	for (unsigned int i = 0; i < rowsPairs.size(); i++) {
+		cout << "rowsPairs " << i << " = ";
+		for (unsigned int j = 0; j < rowsPairs[i].size(); j++) {
+			cout << rowsPairs[i][j] << " ";
 		}
 		cout << endl;
 	}
