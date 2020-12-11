@@ -338,6 +338,47 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 	
 	// TODO: - use linefitting to get slope of each colsGroup and rowsGroup. If slope known, average the slope, then use it to get to know the inclination rotation of document
 	
+	// Getting coloumn pairs (2) and row pairs (3)
+	
+	vector<vector<int>> colsPairs;
+	vector<vector<int>> rowsPairs;
+	
+	for (unsigned int i = 0; i < colsGroupAvg.size() - 1; i++) {
+		vector<int> colPair;
+		
+		if (abs(colsGroupAvg[i] - colsGroupAvg[i + 1]) < 40) {
+			colPair.push_back(colsGroupAvg[i]);
+			colPair.push_back(colsGroupAvg[i + 1]);
+			
+			colsPairs.push_back(colPair);
+		} else {
+			if (i == 0) {
+				// case for single coordinate found on very first document
+				colPair.push_back(colsGroupAvg[i] - 30);
+				colPair.push_back(colsGroupAvg[i]);
+				
+				colsPairs.push_back(colPair);
+			} else if (i == colsGroupAvg.size() - 1) {
+				// case for single coordinate found on very end of document
+				colPair.push_back(colsGroupAvg[i]);
+				colPair.push_back(colsGroupAvg[i] + 30);
+				
+				colsPairs.push_back(colPair);
+			} else {
+				// case for single line found beetween the other pairs
+				cout << "not found " << i << endl;
+			}
+		}
+	}
+	
+	for (unsigned int i = 0; i < colsPairs.size(); i++) {
+		cout << "colsPairs " << i << " = ";
+		for (unsigned int j = 0; j < colsPairs[i].size(); j++) {
+			cout << colsPairs[i][j] << " ";
+		}
+		cout << endl;
+	}
+	
 	erodeImage = Scalar::all(0);
 	
 	for (unsigned int i = 0; i < centerContoursPoint.size(); i++) {
