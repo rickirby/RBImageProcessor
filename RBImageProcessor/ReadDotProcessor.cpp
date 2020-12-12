@@ -451,16 +451,27 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 
 		Point2i startPointCol(colsGroupAvg[i], 0);
 		Point2i endPointCol(colsGroupAvg[i], erodeImage.rows);
-		
+
 		line(erodeImage, startPointCol, endPointCol, Scalar::all(128));
 	}
-	
+
 	for (unsigned int i = 0; i < rowsGroupAvg.size(); i++) {
-		
+
 		Point2i startPointRow(0, rowsGroupAvg[i]);
 		Point2i endPointRow(erodeImage.cols, rowsGroupAvg[i]);
-		
+
 		line(erodeImage, startPointRow, endPointRow, Scalar::all(128));
+	}
+	
+	// Drawing rectangle
+	
+	for (unsigned int i = 0; i < colsPairs.size(); i++) {
+		for (unsigned int j = 0; j < rowsPairs.size(); j++) {
+			Point2i startPoint(colsPairs[i][0] - 15, rowsPairs[j][0] - 15);
+			Point2i endPoint(colsPairs[i][1] + 15, rowsPairs[j][2] + 15);
+			
+			rectangle(erodeImage, startPoint, endPoint, Scalar(255,0,0), 1, 8, 0);
+		}
 	}
 	
 	// TODO: or may be, the line should be drawn from edge of dot to end edge. to handle missing rotation, instead of getting the average and draw it
