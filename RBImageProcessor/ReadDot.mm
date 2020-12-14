@@ -31,7 +31,7 @@ using namespace cv;
 	Mat opencvImage;
 	UIImageToMat(image, opencvImage);
 	
-	return MatToUIImage(_readDotProcessor->blobAnalysis(opencvImage));
+	return MatToUIImage(_readDotProcessor->lineCoordinate(opencvImage));
 }
 
 @end

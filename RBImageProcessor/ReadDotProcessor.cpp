@@ -240,24 +240,31 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 	vector<Point> coordinatePoint = centerContoursPoint;
 	vector<vector<int>> colsGroup;
 	vector<vector<int>> rowsGroup;
+	vector<int> colsGroupAvg;
+	vector<int> rowsGroupAvg;
 	
 	for (unsigned int i = 0; i < coordinatePoint.size(); i++) {
 		
 		vector<int> gotCols;
 		vector<int> gotRows;
 		
+		int avgX = 0;
+		int avgY = 0;
+		
 		if (coordinatePoint[i].x != -1) {
 			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
-				cout << i << "," << j << "=" << coordinatePoint[j] << endl;
+//				cout << i << "," << j << "=" << coordinatePoint[j] << endl;
 				if (coordinatePoint[j].x != -1) {
 					if (j == i) {
-						cout << "asign new value " << coordinatePoint[j] << endl;
+//						cout << "asign new value " << coordinatePoint[j] << endl;
 						gotCols.push_back(coordinatePoint[j].x);
+						avgX = coordinatePoint[j].x;
 						coordinatePoint[j].x = -1;
 					} else {
-						cout << "comparing value " << endl;
-						if (abs(gotCols[0] - coordinatePoint[j].x) < 20) {
+//						cout << "comparing value " << endl;
+						if (abs(avgX - coordinatePoint[j].x) < 20) {
 							gotCols.push_back(coordinatePoint[j].x);
+							avgX = (avgX + coordinatePoint[j].x)/2;
 							coordinatePoint[j].x = -1;
 						}
 					}
@@ -265,21 +272,23 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 			}
 			
 			colsGroup.push_back(gotCols);
+			colsGroupAvg.push_back(avgX);
 		}
 		
 		if (coordinatePoint[i].y != -1) {
 			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
-				cout << i << "," << j << "=" << coordinatePoint[j] << endl;
+//				cout << i << "," << j << "=" << coordinatePoint[j] << endl;
 				if (coordinatePoint[j].y != -1) {
 					if (j == i) {
-						cout << "asign new value " << coordinatePoint[j] << endl;
+//						cout << "asign new value " << coordinatePoint[j] << endl;
 						gotRows.push_back(coordinatePoint[j].y);
+						avgY = coordinatePoint[j].y;
 						coordinatePoint[j].y = -1;
 					} else {
-						cout << "comparing value " << endl;
-						// TODO: try to compare with average value that has got, not first item, also on cols
-						if (abs(gotRows[0] - coordinatePoint[j].y) < 20) {
+//						cout << "comparing value " << endl;
+						if (abs(avgY - coordinatePoint[j].y) < 20) {
 							gotRows.push_back(coordinatePoint[j].y);
+							avgY = (avgY + coordinatePoint[j].y)/2;
 							coordinatePoint[j].y = -1;
 						}
 					}
@@ -287,9 +296,14 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 			}
 			
 			rowsGroup.push_back(gotRows);
+			rowsGroupAvg.push_back(avgY);
 		}
 		
 	}
+	
+	// Sorting colsGroupAvg and rowsGroupAvg
+	sort(colsGroupAvg.begin(), colsGroupAvg.end());
+	sort(rowsGroupAvg.begin(), rowsGroupAvg.end());
 	
 	cout << "=== colsGroup and rowsGroup debugging" << endl;
 	
@@ -309,42 +323,120 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 		}
 	}
 	
+	cout << "colsGroupAvg and rowsGroupAvg debugging" << endl;
+	
+	for (unsigned int i = 0; i < colsGroupAvg.size(); i++) {
+		cout << "colsGroupAvg index: " << i << " = " << colsGroupAvg[i] << endl;
+	}
+	
+	for (unsigned int i = 0; i < rowsGroupAvg.size(); i++) {
+		cout << "rowsGroupAvg index: " << i << " = " << rowsGroupAvg[i] << endl;
+	}
+	
 	cout << "=== colsGroupSize = " << colsGroup.size() << endl;
 	cout << "=== rowsGroupSize = " << rowsGroup.size() << endl;
 	
-	// Getting average value of every coloumns and rows
+	// TODO: - use linefitting to get slope of each colsGroup and rowsGroup. If slope known, average the slope, then use it to get to know the inclination rotation of document
 	
-	vector<int> colsGroupAverage;
-	vector<int> rowsGroupAverage;
+	// Getting coloumn pairs (2) and row pairs (3)
 	
-	for (unsigned int i = 0; i < colsGroup.size(); i++) {
-		int avg = colsGroup[i][0];
-		for (unsigned int j = 0; j < colsGroup.size(); j++) {
-			avg = (avg + colsGroup[i][j]) / 2;
-		}
+	vector<vector<int>> colsPairs;
+	vector<vector<int>> rowsPairs;
+	
+	bool shouldSkip = false;
+	int shouldSkipCount = 0;
+	
+	for (unsigned int i = 0; i < colsGroupAvg.size(); i++) {
+		vector<int> colPair;
 		
-		colsGroupAverage.push_back(avg);
-	}
-	
-	for (unsigned int i = 0; i < rowsGroup.size(); i++) {
-		int avg = rowsGroup[i][0];
-		for (unsigned int j = 0; j < rowsGroup.size(); j++) {
-			avg = (avg + rowsGroup[i][j]) / 2;
+		if (!shouldSkip) {
+			if ((abs(colsGroupAvg[i] - colsGroupAvg[i + 1]) < 40) && (i < colsGroupAvg.size() - 1)) {
+				colPair.push_back(colsGroupAvg[i]);
+				colPair.push_back(colsGroupAvg[i + 1]);
+				
+				shouldSkip = true;
+				colsPairs.push_back(colPair);
+			} else {
+				if (i == 0) {
+					// case for single coordinate found on very first document
+					colPair.push_back(colsGroupAvg[i] - 30);
+					colPair.push_back(colsGroupAvg[i]);
+					
+					shouldSkip = true;
+					colsPairs.push_back(colPair);
+				} else if (i == colsGroupAvg.size() - 1) {
+					// case for single coordinate found on very end of document
+					colPair.push_back(colsGroupAvg[i]);
+					colPair.push_back(colsGroupAvg[i] + 30);
+					
+					colsPairs.push_back(colPair);
+				} else {
+					// case for single line found beetween the other pairs
+					cout << "not found " << i << endl;
+				}
+			}
+		} else {
+			shouldSkip = false;
 		}
+	}
+	
+	shouldSkip = false;
+	
+	for (unsigned int i = 0; i < rowsGroupAvg.size(); i++) {
+		vector<int> rowPair;
 		
-		rowsGroupAverage.push_back(avg);
+		if (shouldSkipCount == 0) {
+			if ((abs(rowsGroupAvg[i] - rowsGroupAvg[i + 1]) < 40) && (i < rowsGroupAvg.size() - 2)) {
+				rowPair.push_back(rowsGroupAvg[i]);
+				rowPair.push_back(rowsGroupAvg[i + 1]);
+				rowPair.push_back(rowsGroupAvg[i + 2]);
+				
+				shouldSkipCount++;
+				rowsPairs.push_back(rowPair);
+			} else {
+				if (i == 0) {
+					// case for single coordinate found on very first document
+					rowPair.push_back(rowsGroupAvg[i] - 60);
+					rowPair.push_back(rowsGroupAvg[i] - 30);
+					rowPair.push_back(rowsGroupAvg[i]);
+					
+					shouldSkipCount++;
+					rowsPairs.push_back(rowPair);
+				} else if (i == rowsGroupAvg.size() - 1) {
+					// case for single coordinate found on very end of document
+					rowPair.push_back(rowsGroupAvg[i]);
+					rowPair.push_back(rowsGroupAvg[i] + 30);
+					rowPair.push_back(rowsGroupAvg[i] + 60);
+					
+					rowsPairs.push_back(rowPair);
+				} else {
+					// case for single line found beetween the other pairs
+					cout << "not found " << i << endl;
+				}
+			}
+		} else {
+			if (shouldSkipCount > 1) {
+				shouldSkipCount = 0;
+			} else {
+				shouldSkipCount++;
+			}
+		}
 	}
 	
-	cout << "=== colsGroupAverage debugging" << endl;
-	
-	for (unsigned int i = 0; i < colsGroupAverage.size(); i++) {
-		cout << "rowsGroupAverage index: " << i << " = " << colsGroupAverage[i] << endl;
+	for (unsigned int i = 0; i < colsPairs.size(); i++) {
+		cout << "colsPairs " << i << " = ";
+		for (unsigned int j = 0; j < colsPairs[i].size(); j++) {
+			cout << colsPairs[i][j] << " ";
+		}
+		cout << endl;
 	}
 	
-	cout << "=== rowsGroupAverage debugging" << endl;
-	
-	for (unsigned int i = 0; i < rowsGroupAverage.size(); i++) {
-		cout << "rowsGroupAverage index: " << i << " = " << rowsGroupAverage[i] << endl;
+	for (unsigned int i = 0; i < rowsPairs.size(); i++) {
+		cout << "rowsPairs " << i << " = ";
+		for (unsigned int j = 0; j < rowsPairs[i].size(); j++) {
+			cout << rowsPairs[i][j] << " ";
+		}
+		cout << endl;
 	}
 	
 	erodeImage = Scalar::all(0);
@@ -355,20 +447,31 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 	
 	// Drawing line
 	
-	for (unsigned int i = 0; i < colsGroup.size(); i++) {
+	for (unsigned int i = 0; i < colsGroupAvg.size(); i++) {
 
-		Point2i startPointCol(colsGroup[i][0], 0);
-		Point2i endPointCol(colsGroup[i][0], erodeImage.rows);
-		
+		Point2i startPointCol(colsGroupAvg[i], 0);
+		Point2i endPointCol(colsGroupAvg[i], erodeImage.rows);
+
 		line(erodeImage, startPointCol, endPointCol, Scalar::all(128));
 	}
-	
-	for (unsigned int i = 0; i < rowsGroup.size(); i++) {
-		
-		Point2i startPointRow(0, rowsGroup[i][0]);
-		Point2i endPointRow(erodeImage.cols, rowsGroup[i][0]);
-		
+
+	for (unsigned int i = 0; i < rowsGroupAvg.size(); i++) {
+
+		Point2i startPointRow(0, rowsGroupAvg[i]);
+		Point2i endPointRow(erodeImage.cols, rowsGroupAvg[i]);
+
 		line(erodeImage, startPointRow, endPointRow, Scalar::all(128));
+	}
+	
+	// Drawing rectangle
+	
+	for (unsigned int i = 0; i < colsPairs.size(); i++) {
+		for (unsigned int j = 0; j < rowsPairs.size(); j++) {
+			Point2i startPoint(colsPairs[i][0] - 15, rowsPairs[j][0] - 15);
+			Point2i endPoint(colsPairs[i][1] + 15, rowsPairs[j][2] + 15);
+			
+			rectangle(erodeImage, startPoint, endPoint, Scalar(255,0,0), 1, 8, 0);
+		}
 	}
 	
 	// TODO: or may be, the line should be drawn from edge of dot to end edge. to handle missing rotation, instead of getting the average and draw it
