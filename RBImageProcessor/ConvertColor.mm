@@ -27,6 +27,26 @@ using namespace cv;
 	return self;
 }
 
+- (void)setAdaptiveType:(BOOL)adaptiveType {
+	_convertColorProcessor->adaptiveType = adaptiveType;
+}
+
+- (void)setAdaptiveBlockSize:(NSInteger)adaptiveBlockSize {
+	_convertColorProcessor->adaptiveBlockSize = (int) adaptiveBlockSize;
+}
+
+- (void)setAdaptiveConstant:(double)adaptiveConstant {
+	_convertColorProcessor->adaptiveConstant = adaptiveConstant;
+}
+
+- (void)setDilateIteration:(NSInteger)dilateIteration {
+	_convertColorProcessor->dilateIteration = (int) dilateIteration;
+}
+
+- (void)setErodeIteration:(NSInteger)erodeIteration {
+	_convertColorProcessor->erodeIteration = (int) erodeIteration;
+}
+
 - (UIImage *)makeGrayFromImage:(UIImage *)image {
 	Mat opencvImage;
 	UIImageToMat(image, opencvImage);

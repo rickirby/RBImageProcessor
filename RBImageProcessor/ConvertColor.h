@@ -14,6 +14,12 @@
 
 - (instancetype _Nonnull)initWithAdaptiveType:(BOOL)adaptiveType adaptiveBlockSize:(NSInteger)adaptiveBlockSize adaptiveConstant:(double)adaptiveConstant dilateIteration:(NSInteger)dilateIteration erodeIteration:(NSInteger)erodeIteration;
 
+- (void)setAdaptiveType:(BOOL)adaptiveType;
+- (void)setAdaptiveBlockSize:(NSInteger)adaptiveBlockSize;
+- (void)setAdaptiveConstant:(double)adaptiveConstant;
+- (void)setDilateIteration:(NSInteger)dilateIteration;
+- (void)setErodeIteration:(NSInteger)erodeIteration;
+
 - (UIImage *_Nonnull)makeGrayFromImage:(UIImage *_Nonnull)image;
 - (UIImage *_Nonnull)makeHSVFromImage:(UIImage *_Nonnull)image;
 - (UIImage *_Nonnull)makeBWFromImage:(UIImage *_Nonnull)image;
