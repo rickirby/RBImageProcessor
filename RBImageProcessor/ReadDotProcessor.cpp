@@ -26,12 +26,10 @@ ReadDotProcessor::~ReadDotProcessor() {
 	_erodeIteration = NULL;
 }
 
-Mat ReadDotProcessor::blobAnalysis(Mat image) {
+Mat ReadDotProcessor::rawContours(Mat image) {
+	Mat gray, adaptiveImage, dilateImage, erodeImage;
 	
-	Mat gray, adaptiveImage, dilateImage, erodeImage, result;
-	vector<vector<Point>> contours;
-	
-	// Image Pre processing
+	// Image Pre Processing
 	
 	cvtColor(image, gray, COLOR_BGR2GRAY);
 	adaptiveThreshold(gray, adaptiveImage, 255, _adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, _adaptiveBlockSize, _adaptiveConstant);
@@ -40,44 +38,57 @@ Mat ReadDotProcessor::blobAnalysis(Mat image) {
 	
 	// Blob Analysis
 	
+	vector<vector<Point>> contours;
+	
 	findContours(erodeImage, contours, noArray(), RETR_LIST, CHAIN_APPROX_SIMPLE);
 	
-	vector<vector<Point>> filteredContours;
-
-	cout << "=== filtering contours" << endl;
+	// Drawing Contours
 	
-	for (int i = 0; i < contours.size(); i++) {
-		double currentArea = contourArea(contours[i]);
-		if ((currentArea > 200.0) && (currentArea < 500.0)) {
-			filteredContours.push_back(contours[i]);
-		}
-	}
+	Mat result = Mat::zeros(erodeImage.rows, erodeImage.cols, CV_8UC1);
+	drawContours(result, contours, -1, Scalar::all(255));
 	
-	cout << "=== eliminating " << contours.size() - filteredContours.size() << " contours" << endl;
-	
-	cout << "=== findContours debugging" << endl;
-	
-	for (unsigned int i = 0;  i < filteredContours.size();  i++) {
-		cout << "# Index: " << i << ", points count: " << filteredContours[i].size() << endl;
-		for (unsigned int j=0;  j < filteredContours[i].size();  j++) {
-			cout << "Point(x,y)=" << filteredContours[i][j] << endl;
-		}
-		
-		cout << " Area: " << contourArea(filteredContours[i]) << std::endl;
-	}
-	
-	erodeImage = Scalar::all(0);
-	drawContours(erodeImage, filteredContours, -1, Scalar::all(255));
-	
-	return erodeImage;
+	return result;
 }
 
-Mat ReadDotProcessor::dotCircle(Mat image) {
-	
-	Mat gray, adaptiveImage, dilateImage, erodeImage, result;
+Mat ReadDotProcessor::filteredContours(Mat image) {
+	Mat gray, adaptiveImage, dilateImage, erodeImage;
+
+	// Image Pre Processing
+
+	cvtColor(image, gray, COLOR_BGR2GRAY);
+	adaptiveThreshold(gray, adaptiveImage, 255, _adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, _adaptiveBlockSize, _adaptiveConstant);
+	dilate(adaptiveImage, dilateImage, Mat(), Point(-1, -1), _dilateIteration);
+	erode(dilateImage, erodeImage, Mat(), Point(-1, -1), _erodeIteration);
+
+	// Blob Analysis
+
 	vector<vector<Point>> contours;
+
+	findContours(erodeImage, contours, noArray(), RETR_LIST, CHAIN_APPROX_SIMPLE);
+
+	// Filtering Contours
+
+	vector<vector<Point>> filteredContours;
+
+	for (int i = 0; i < contours.size(); i++) {
+		double currentArea = contourArea(contours[i]);
+		if ((currentArea > 200.0) && (currentArea < 500.0)) {
+			filteredContours.push_back(contours[i]);
+		}
+	}
 	
-	// Image Pre processing
+	// Drawing Contours
+	
+	Mat result = Mat::zeros(erodeImage.rows, erodeImage.cols, CV_8UC1);
+	drawContours(result, filteredContours, -1, Scalar::all(255));
+	
+	return result;
+}
+
+Mat ReadDotProcessor::redraw(Mat image) {
+	Mat gray, adaptiveImage, dilateImage, erodeImage;
+	
+	// Image Pre Processing
 	
 	cvtColor(image, gray, COLOR_BGR2GRAY);
 	adaptiveThreshold(gray, adaptiveImage, 255, _adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, _adaptiveBlockSize, _adaptiveConstant);
@@ -86,30 +97,19 @@ Mat ReadDotProcessor::dotCircle(Mat image) {
 	
 	// Blob Analysis
 	
+	vector<vector<Point>> contours;
+	
 	findContours(erodeImage, contours, noArray(), RETR_LIST, CHAIN_APPROX_SIMPLE);
 	
-	vector<vector<Point>> filteredContours;
+	// Filtering Contours
 	
-	cout << "=== filtering contours" << endl;
+	vector<vector<Point>> filteredContours;
 	
 	for (int i = 0; i < contours.size(); i++) {
 		double currentArea = contourArea(contours[i]);
 		if ((currentArea > 200.0) && (currentArea < 500.0)) {
 			filteredContours.push_back(contours[i]);
 		}
-	}
-	
-	cout << "=== eliminating " << contours.size() - filteredContours.size() << " contours" << endl;
-	
-	cout << "=== findContours debugging" << endl;
-	
-	for (unsigned int i = 0;  i < filteredContours.size();  i++) {
-		cout << "# Index: " << i << ", points count: " << filteredContours[i].size() << endl;
-		for (unsigned int j = 0;  j < filteredContours[i].size();  j++) {
-			cout << "Point(x,y)=" << filteredContours[i][j] << endl;
-		}
-		
-		cout << " Area: " << contourArea(filteredContours[i]) << endl;
 	}
 	
 	// Finding min max coordinate per dot and average them to get center point
@@ -138,28 +138,163 @@ Mat ReadDotProcessor::dotCircle(Mat image) {
 		centerContoursPoint.push_back(centerPoint);
 	}
 	
-	cout << "=== centerPoint debugging" << endl;
+	// Drawing Circle on center point got
 	
-	for (unsigned int i = 0;  i < filteredContours.size();  i++) {
-		cout << "# Index: " << i << ", points count: " << filteredContours[i].size() << endl;
-		for (unsigned int j = 0;  j < filteredContours[i].size();  j++) {
-			cout << "Point(x,y)=" << filteredContours[i][j] << endl;
-		}
-		
-		cout << " Center: " << centerContoursPoint[i] << endl;
-		cout << " Area: " << contourArea(filteredContours[i]) << endl;
-	}
-	
-	erodeImage = Scalar::all(0);
+	Mat result = Mat::zeros(erodeImage.rows, erodeImage.cols, CV_8UC1);
 	
 	for (unsigned int i = 0; i < centerContoursPoint.size(); i++) {
-		circle(erodeImage, centerContoursPoint[i], 10, Scalar::all(255), -1);
+		circle(result, centerContoursPoint[i], 10, Scalar::all(255), -1);
 	}
 	
-	return erodeImage;
+	return result;
 }
 
 Mat ReadDotProcessor::lineCoordinate(Mat image) {
+	Mat gray, adaptiveImage, dilateImage, erodeImage;
+	
+	// Image Pre Processing
+	
+	cvtColor(image, gray, COLOR_BGR2GRAY);
+	adaptiveThreshold(gray, adaptiveImage, 255, _adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, _adaptiveBlockSize, _adaptiveConstant);
+	dilate(adaptiveImage, dilateImage, Mat(), Point(-1, -1), _dilateIteration);
+	erode(dilateImage, erodeImage, Mat(), Point(-1, -1), _erodeIteration);
+	
+	// Blob Analysis
+	
+	vector<vector<Point>> contours;
+	
+	findContours(erodeImage, contours, noArray(), RETR_LIST, CHAIN_APPROX_SIMPLE);
+	
+	// Filtering Contours
+	
+	vector<vector<Point>> filteredContours;
+	
+	for (int i = 0; i < contours.size(); i++) {
+		double currentArea = contourArea(contours[i]);
+		if ((currentArea > 200.0) && (currentArea < 500.0)) {
+			filteredContours.push_back(contours[i]);
+		}
+	}
+	
+	// Finding min max coordinate per dot and average them to get center point
+	
+	vector<Point> centerContoursPoint;
+	
+	for (unsigned int i = 0; i < filteredContours.size(); i++) {
+		
+		int minX = filteredContours[i][0].x, minY = filteredContours[i][0].y, maxX = filteredContours[i][0].x, maxY = filteredContours[i][0].y;
+		
+		for (unsigned int j = 0; j < filteredContours[i].size(); j++) {
+			
+			int currentX = filteredContours[i][j].x;
+			int currentY = filteredContours[i][j].y;
+			
+			minX = min(minX, currentX);
+			minY = min(minY, currentY);
+			maxX = max(maxX, currentX);
+			maxY = max(maxY, currentY);
+		}
+		
+		int centerX = (minX + maxX) / 2;
+		int centerY = (minY + maxY) / 2;
+		
+		Point2i centerPoint(centerX, centerY);
+		centerContoursPoint.push_back(centerPoint);
+	}
+	
+	// Grouping centerContoursPoint with same row position and col position, to get the number and coordinate of row and col
+	
+	vector<Point> coordinatePoint = centerContoursPoint;
+	vector<vector<int>> colsGroup;
+	vector<vector<int>> rowsGroup;
+	vector<int> colsGroupAvg;
+	vector<int> rowsGroupAvg;
+	
+	for (unsigned int i = 0; i < coordinatePoint.size(); i++) {
+		
+		vector<int> gotCols;
+		vector<int> gotRows;
+		
+		int avgX = 0;
+		int avgY = 0;
+		
+		if (coordinatePoint[i].x != -1) {
+			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
+				if (coordinatePoint[j].x != -1) {
+					if (j == i) {
+						gotCols.push_back(coordinatePoint[j].x);
+						avgX = coordinatePoint[j].x;
+						coordinatePoint[j].x = -1;
+					} else {
+						if (abs(avgX - coordinatePoint[j].x) < 20) {
+							gotCols.push_back(coordinatePoint[j].x);
+							avgX = (avgX + coordinatePoint[j].x)/2;
+							coordinatePoint[j].x = -1;
+						}
+					}
+				}
+			}
+			
+			colsGroup.push_back(gotCols);
+			colsGroupAvg.push_back(avgX);
+		}
+		
+		if (coordinatePoint[i].y != -1) {
+			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
+				if (coordinatePoint[j].y != -1) {
+					if (j == i) {
+						gotRows.push_back(coordinatePoint[j].y);
+						avgY = coordinatePoint[j].y;
+						coordinatePoint[j].y = -1;
+					} else {
+						if (abs(avgY - coordinatePoint[j].y) < 20) {
+							gotRows.push_back(coordinatePoint[j].y);
+							avgY = (avgY + coordinatePoint[j].y)/2;
+							coordinatePoint[j].y = -1;
+						}
+					}
+				}
+			}
+			
+			rowsGroup.push_back(gotRows);
+			rowsGroupAvg.push_back(avgY);
+		}
+		
+	}
+	
+	// Sorting colsGroupAvg and rowsGroupAvg
+	
+	sort(colsGroupAvg.begin(), colsGroupAvg.end());
+	sort(rowsGroupAvg.begin(), rowsGroupAvg.end());
+	
+	// Drawing circle and lines
+	
+	Mat result = Mat::zeros(erodeImage.rows, erodeImage.cols, CV_8UC1);
+	
+	for (unsigned int i = 0; i < centerContoursPoint.size(); i++) {
+		circle(result, centerContoursPoint[i], 10, Scalar::all(255), -1);
+	}
+	
+	for (unsigned int i = 0; i < colsGroupAvg.size(); i++) {
+		
+		Point2i startPointCol(colsGroupAvg[i], 0);
+		Point2i endPointCol(colsGroupAvg[i], erodeImage.rows);
+		
+		line(result, startPointCol, endPointCol, Scalar::all(128));
+	}
+	
+	for (unsigned int i = 0; i < rowsGroupAvg.size(); i++) {
+		
+		Point2i startPointRow(0, rowsGroupAvg[i]);
+		Point2i endPointRow(erodeImage.cols, rowsGroupAvg[i]);
+		
+		line(result, startPointRow, endPointRow, Scalar::all(128));
+	}
+	
+	return result;
+}
+
+Mat ReadDotProcessor::segmentation(Mat image) {
 	
 	Mat gray, adaptiveImage, dilateImage, erodeImage, result;
 	vector<vector<Point>> contours;
@@ -253,15 +388,12 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 		
 		if (coordinatePoint[i].x != -1) {
 			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
-//				cout << i << "," << j << "=" << coordinatePoint[j] << endl;
 				if (coordinatePoint[j].x != -1) {
 					if (j == i) {
-//						cout << "asign new value " << coordinatePoint[j] << endl;
 						gotCols.push_back(coordinatePoint[j].x);
 						avgX = coordinatePoint[j].x;
 						coordinatePoint[j].x = -1;
 					} else {
-//						cout << "comparing value " << endl;
 						if (abs(avgX - coordinatePoint[j].x) < 20) {
 							gotCols.push_back(coordinatePoint[j].x);
 							avgX = (avgX + coordinatePoint[j].x)/2;
@@ -277,15 +409,12 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 		
 		if (coordinatePoint[i].y != -1) {
 			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
-//				cout << i << "," << j << "=" << coordinatePoint[j] << endl;
 				if (coordinatePoint[j].y != -1) {
 					if (j == i) {
-//						cout << "asign new value " << coordinatePoint[j] << endl;
 						gotRows.push_back(coordinatePoint[j].y);
 						avgY = coordinatePoint[j].y;
 						coordinatePoint[j].y = -1;
 					} else {
-//						cout << "comparing value " << endl;
 						if (abs(avgY - coordinatePoint[j].y) < 20) {
 							gotRows.push_back(coordinatePoint[j].y);
 							avgY = (avgY + coordinatePoint[j].y)/2;
@@ -302,6 +431,7 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 	}
 	
 	// Sorting colsGroupAvg and rowsGroupAvg
+	
 	sort(colsGroupAvg.begin(), colsGroupAvg.end());
 	sort(rowsGroupAvg.begin(), rowsGroupAvg.end());
 	
