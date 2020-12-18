@@ -27,11 +27,39 @@ using namespace cv;
 	return self;
 }
 
-- (UIImage *_Nonnull)blobAnalysisFromImage:(UIImage *_Nonnull)image {
+- (UIImage *_Nonnull)rawContoursFromImage:(UIImage *_Nonnull)image {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(_readDotProcessor->rawContours(opencvImage));
+}
+
+- (UIImage *_Nonnull)filteredContoursFromImage:(UIImage *_Nonnull)image {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(_readDotProcessor->filteredContours(opencvImage));
+}
+
+- (UIImage *_Nonnull)redrawFromImage:(UIImage *_Nonnull)image {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(_readDotProcessor->redraw(opencvImage));
+}
+
+- (UIImage *_Nonnull)lineCoordinateFromImage:(UIImage *_Nonnull)image {
 	Mat opencvImage;
 	UIImageToMat(image, opencvImage);
 	
 	return MatToUIImage(_readDotProcessor->lineCoordinate(opencvImage));
+}
+
+- (UIImage *_Nonnull)segmentationFromImage:(UIImage *_Nonnull)image {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(_readDotProcessor->segmentation(opencvImage));
 }
 
 @end

@@ -27,9 +27,11 @@ public:
 	
 	// MARK: - Public Methods
 	
-	Mat blobAnalysis(Mat image);
-	Mat dotCircle(Mat image);
+	Mat rawContours(Mat image);
+	Mat filteredContours(Mat image);
+	Mat redraw(Mat image);
 	Mat lineCoordinate(Mat image);
+	Mat segmentation(Mat image);
 	
 private:
 	

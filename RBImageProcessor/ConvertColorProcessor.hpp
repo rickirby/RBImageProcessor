@@ -17,12 +17,27 @@ using namespace cv;
 class ConvertColorProcessor {
 public:
 	
-	static Mat convertToGRAY(Mat image);
-	static Mat convertToHSV(Mat image);
-	static Mat convertToBW(Mat image);
-	static Mat adaptiveThreshold(Mat image, bool isGaussian, int blockSize, double constant);
-	static Mat dilate(Mat image, int iteration, bool isGaussian, int blockSize, double constant);
-	static Mat erode(Mat image, int erodeIteration, int dilateIteration, bool isGaussian, int blockSize, double constant);
+	// MARK: - Life Cycles
+	
+	ConvertColorProcessor(bool adaptiveType_, int adaptiveBlockSize_, double adaptiveConstant_, int dilateIteration_, int erodeIteration_);
+	~ConvertColorProcessor();
+	
+	// MARK: - Public Properties
+
+	bool adaptiveType;
+	int adaptiveBlockSize;
+	double adaptiveConstant;
+	int dilateIteration;
+	int erodeIteration;
+	
+	// MARK: - Public Methods
+	
+	Mat convertToGRAY(Mat image);
+	Mat convertToHSV(Mat image);
+	Mat convertToBW(Mat image);
+	Mat adaptiveThreshold(Mat image);
+	Mat dilate(Mat image);
+	Mat erode(Mat image);
 
 };
 
