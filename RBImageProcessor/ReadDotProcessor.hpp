@@ -31,6 +31,7 @@ public:
 	Mat filteredContours(Mat image);
 	Mat redraw(Mat image);
 	Mat lineCoordinate(Mat image);
+	Mat asegmentation(Mat image);
 	Mat segmentation(Mat image);
 	
 	Mat blobAnalysis(Mat image);

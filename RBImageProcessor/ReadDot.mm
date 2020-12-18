@@ -31,7 +31,7 @@ using namespace cv;
 	Mat opencvImage;
 	UIImageToMat(image, opencvImage);
 	
-	return MatToUIImage(_readDotProcessor->lineCoordinate(opencvImage));
+	return MatToUIImage(_readDotProcessor->segmentation(opencvImage));
 }
 
 @end
