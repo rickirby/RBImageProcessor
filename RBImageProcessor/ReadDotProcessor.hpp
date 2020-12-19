@@ -29,6 +29,7 @@ public:
 	
 	double minAreaContourFilter;
 	double maxAreaContourFilter;
+	double redrawCircleSize;
 	double maxSpaceForGroupingSameRowAndCols;
 	double maxDotSpaceInterDot;
 	double defaultDotSpaceIterDot;
