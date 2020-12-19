@@ -15,48 +15,78 @@
 using namespace std;
 using namespace cv;
 
-@implementation ConvertColor
-
-+ (UIImage *)makeGrayFromImage:(UIImage *)image {
-	Mat opencvImage;
-	UIImageToMat(image, opencvImage);
-	
-	return MatToUIImage(ConvertColorProcessor::convertToGRAY(opencvImage));
+@implementation ConvertColor {
+	ConvertColorProcessor* _convertColorProcessor;
 }
 
-+ (UIImage *)makeHSVFromImage:(UIImage *)image {
-	Mat opencvImage;
-	UIImageToMat(image, opencvImage);
+- (instancetype _Nonnull)initWithAdaptiveType:(BOOL)adaptiveType adaptiveBlockSize:(NSInteger)adaptiveBlockSize adaptiveConstant:(double)adaptiveConstant dilateIteration:(NSInteger)dilateIteration erodeIteration:(NSInteger)erodeIteration {
+	if ((self = [super init])) {
+		_convertColorProcessor = new ConvertColorProcessor(adaptiveType, (int) adaptiveBlockSize, adaptiveConstant, (int) dilateIteration, (int) erodeIteration);
+	}
 	
-	return MatToUIImage(ConvertColorProcessor::convertToHSV(opencvImage));
+	return self;
 }
 
-+ (UIImage *)makeBWFromImage:(UIImage *)image {
-	Mat opencvImage;
-	UIImageToMat(image, opencvImage);
-	
-	return MatToUIImage(ConvertColorProcessor::convertToBW(opencvImage));
+- (void)setAdaptiveType:(BOOL)adaptiveType {
+	_convertColorProcessor->adaptiveType = adaptiveType;
 }
 
-+ (UIImage *)adaptiveThresholdFromImage:(UIImage *)image isGaussian:(BOOL)isGaussian blockSize:(NSInteger)blockSize constant:(double)constant {
-	Mat opencvImage;
-	UIImageToMat(image, opencvImage);
-	
-	return MatToUIImage(ConvertColorProcessor::adaptiveThreshold(opencvImage, isGaussian, (int) blockSize, constant));
+- (void)setAdaptiveBlockSize:(NSInteger)adaptiveBlockSize {
+	_convertColorProcessor->adaptiveBlockSize = (int) adaptiveBlockSize;
 }
 
-+ (UIImage *)dilateFromImage:(UIImage *)image iteration:(NSInteger)iteration isGaussian:(BOOL)isGaussian adaptiveBlockSize:(NSInteger)blockSize adaptiveConstant:(double)constant {
-	Mat opencvImage;
-	UIImageToMat(image, opencvImage);
-	
-	return MatToUIImage(ConvertColorProcessor::dilate(opencvImage, (int) iteration, isGaussian, (int) blockSize, constant));
+- (void)setAdaptiveConstant:(double)adaptiveConstant {
+	_convertColorProcessor->adaptiveConstant = adaptiveConstant;
 }
 
-+ (UIImage *)erodeFromImage:(UIImage *)image erodeIteration:(NSInteger)erodeIteration dilateIteration:(NSInteger)dilateIteration isGaussian:(BOOL)isGaussian adaptiveBlockSize:(NSInteger)blockSize adaptiveConstant:(double)constant {
+- (void)setDilateIteration:(NSInteger)dilateIteration {
+	_convertColorProcessor->dilateIteration = (int) dilateIteration;
+}
+
+- (void)setErodeIteration:(NSInteger)erodeIteration {
+	_convertColorProcessor->erodeIteration = (int) erodeIteration;
+}
+
+- (UIImage *)makeGrayFromImage:(UIImage *)image {
 	Mat opencvImage;
 	UIImageToMat(image, opencvImage);
 	
-	return MatToUIImage(ConvertColorProcessor::erode(opencvImage, (int) erodeIteration, (int) dilateIteration, isGaussian, (int) blockSize, constant));
+	return MatToUIImage(_convertColorProcessor->convertToGRAY(opencvImage));
+}
+
+- (UIImage *)makeHSVFromImage:(UIImage *)image {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(_convertColorProcessor->convertToHSV(opencvImage));
+}
+
+- (UIImage *)makeBWFromImage:(UIImage *)image {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(_convertColorProcessor->convertToBW(opencvImage));
+}
+
+- (UIImage *)adaptiveThresholdFromImage:(UIImage *)image {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(_convertColorProcessor->adaptiveThreshold(opencvImage));
+}
+
+- (UIImage *)dilateFromImage:(UIImage *)image {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(_convertColorProcessor->dilate(opencvImage));
+}
+
+- (UIImage *)erodeFromImage:(UIImage *)image {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(_convertColorProcessor->erode(opencvImage));
 }
 
 @end
