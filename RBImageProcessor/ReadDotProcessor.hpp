@@ -42,6 +42,12 @@ private:
 	int _dilateIteration;
 	int _erodeIteration;
 	
+	double _minAreaFilter;
+	double _maxAreaFilter;
+	double _maxSpaceForGroupingSameRowAndCols;
+	double _maxDotSpaceInterDot;
+	double _defaultDotSpaceIterDot;
+	
 };
 
 #endif /* ReadDotProcessor_hpp */
