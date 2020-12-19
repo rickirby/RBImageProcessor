@@ -16,6 +16,7 @@
 
 - (void)setMinAreaContourFilter:(double)minAreaContourFilter;
 - (void)setMaxAreaContourFilter:(double)maxAreaContourFilter;
+- (void)setRedrawCircleSize:(double)redrawCircleSize;
 - (void)setMaxSpaceForGroupingSameRowAndCols:(double)maxSpaceForGroupingSameRowAndCols;
 - (void)setMaxDotSpaceInterDot:(double)maxDotSpaceInterDot;
 - (void)setDefaultDotSpaceInterDot:(double)defaultDotSpaceInterDot;

@@ -35,6 +35,10 @@ using namespace cv;
 	_readDotProcessor->maxAreaContourFilter = maxAreaContourFilter;
 }
 
+- (void)setRedrawCircleSize:(double)redrawCircleSize {
+	_readDotProcessor->redrawCircleSize = redrawCircleSize;
+}
+
 - (void)setMaxSpaceForGroupingSameRowAndCols:(double)maxSpaceForGroupingSameRowAndCols {
 	_readDotProcessor->maxSpaceForGroupingSameRowAndCols = maxSpaceForGroupingSameRowAndCols;
 }
