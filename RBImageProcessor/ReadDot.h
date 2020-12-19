@@ -12,7 +12,17 @@
 
 @interface ReadDot : NSObject
 
-- (instancetype _Nonnull)initWithAdaptiveType:(BOOL)adaptiveType adaptiveBlockSize:(NSInteger)adaptiveBlockSize adaptiveConstant:(double)adaptiveConstant dilateIteration:(NSInteger)dilateIteration erodeIteration:(NSInteger)erodeIteration;
+- (instancetype _Nonnull)initWithAdaptiveType:(BOOL)adaptiveType
+							adaptiveBlockSize:(NSInteger)adaptiveBlockSize
+							 adaptiveConstant:(double)adaptiveConstant
+							  dilateIteration:(NSInteger)dilateIteration
+							   erodeIteration:(NSInteger)erodeIteration
+						 minAreaContourFilter:(double)minAreaContourFilter
+						   maxAreaContourSize:(double)maxAreaContourSize
+							 redrawCircleSize:(double)redrawCircleSize
+			maxSpaceForGroupingSameRowAndCols:(double)maxSpaceForGroupingSameRowAndCols
+						  maxDotSpaceInterDot:(double)maxDotSpaceInterDot
+					  defaultDotSpaceInterDot:(double)defaultDotSpaceInterDot;
 
 - (void)setMinAreaContourFilter:(double)minAreaContourFilter;
 - (void)setMaxAreaContourFilter:(double)maxAreaContourFilter;

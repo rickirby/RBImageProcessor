@@ -10,12 +10,19 @@
 
 // MARK: - Life Cycles
 
-ReadDotProcessor::ReadDotProcessor(bool adaptiveType, int adaptiveBlockSize, double adaptiveConstant, int dilateIteration, int erodeIteration) {
+ReadDotProcessor::ReadDotProcessor(bool adaptiveType, int adaptiveBlockSize, double adaptiveConstant, int dilateIteration, int erodeIteration, double minAreaContourFilter_, double maxAreaContourFilter_, double redrawCircleSize_, double maxSpaceForGroupingSameRowAndCols_, double maxDotSpaceInterDot_, double defaultDotSpaceInterDot_) {
 	_adaptiveType = adaptiveType;
 	_adaptiveBlockSize = adaptiveBlockSize;
 	_adaptiveConstant = adaptiveConstant;
 	_dilateIteration = dilateIteration;
 	_erodeIteration = erodeIteration;
+	
+	minAreaContourFilter = minAreaContourFilter_;
+	maxAreaContourFilter = maxAreaContourFilter_;
+	redrawCircleSize = redrawCircleSize_;
+	maxSpaceForGroupingSameRowAndCols = maxSpaceForGroupingSameRowAndCols_;
+	maxDotSpaceInterDot = maxDotSpaceInterDot_;
+	defaultDotSpaceInterDot = defaultDotSpaceInterDot_;
 }
 
 ReadDotProcessor::~ReadDotProcessor() {

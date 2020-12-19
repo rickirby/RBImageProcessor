@@ -19,9 +19,19 @@ using namespace cv;
 	ReadDotProcessor* _readDotProcessor;
 }
 
-- (instancetype _Nonnull)initWithAdaptiveType:(BOOL)adaptiveType adaptiveBlockSize:(NSInteger)adaptiveBlockSize adaptiveConstant:(double)adaptiveConstant dilateIteration:(NSInteger)dilateIteration erodeIteration:(NSInteger)erodeIteration {
+- (instancetype _Nonnull)initWithAdaptiveType:(BOOL)adaptiveType
+							adaptiveBlockSize:(NSInteger)adaptiveBlockSize
+							 adaptiveConstant:(double)adaptiveConstant
+							  dilateIteration:(NSInteger)dilateIteration
+							   erodeIteration:(NSInteger)erodeIteration
+						 minAreaContourFilter:(double)minAreaContourFilter
+						   maxAreaContourSize:(double)maxAreaContourSize
+							 redrawCircleSize:(double)redrawCircleSize
+			maxSpaceForGroupingSameRowAndCols:(double)maxSpaceForGroupingSameRowAndCols
+						  maxDotSpaceInterDot:(double)maxDotSpaceInterDot
+					  defaultDotSpaceInterDot:(double)defaultDotSpaceInterDot {
 	if ((self = [super init])) {
-		_readDotProcessor = new ReadDotProcessor(adaptiveType, (int) adaptiveBlockSize, adaptiveConstant, (int) dilateIteration, (int) erodeIteration);
+		_readDotProcessor = new ReadDotProcessor(adaptiveType, (int) adaptiveBlockSize, adaptiveConstant, (int) dilateIteration, (int) erodeIteration, minAreaContourFilter, maxAreaContourSize, redrawCircleSize, maxSpaceForGroupingSameRowAndCols, maxDotSpaceInterDot, defaultDotSpaceInterDot);
 	}
 	
 	return self;
@@ -48,7 +58,7 @@ using namespace cv;
 }
 
 - (void)setDefaultDotSpaceInterDot:(double)defaultDotSpaceInterDot {
-	
+	_readDotProcessor->defaultDotSpaceInterDot = defaultDotSpaceInterDot;
 }
 
 - (UIImage *_Nonnull)rawContoursFromImage:(UIImage *_Nonnull)image {
