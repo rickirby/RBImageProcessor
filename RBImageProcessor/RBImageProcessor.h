@@ -17,3 +17,4 @@ FOUNDATION_EXPORT const unsigned char RBImageProcessorVersionString[];
 // In this header, you should import all the public headers of your framework using statements like #import <RBImageProcessor/PublicHeader.h>
 
 #import <RBImageProcessor/ConvertColor.h>
+#import <RBImageProcessor/ReadDot.h>
