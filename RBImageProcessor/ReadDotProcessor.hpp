@@ -25,6 +25,14 @@ public:
 	ReadDotProcessor(bool adaptiveType, int adaptiveBlockSize, double adaptiveConstant, int dilateIteration, int erodeIteration);
 	~ReadDotProcessor();
 	
+	// MARK: - Public Properties
+	
+	double minAreaContourFilter;
+	double maxAreaContourFilter;
+	double maxSpaceForGroupingSameRowAndCols;
+	double maxDotSpaceInterDot;
+	double defaultDotSpaceIterDot;
+	
 	// MARK: - Public Methods
 	
 	Mat rawContours(Mat image);
@@ -41,12 +49,6 @@ private:
 	double _adaptiveConstant;
 	int _dilateIteration;
 	int _erodeIteration;
-	
-	double _minAreaContourFilter;
-	double _maxAreaContourFilter;
-	double _maxSpaceForGroupingSameRowAndCols;
-	double _maxDotSpaceInterDot;
-	double _defaultDotSpaceIterDot;
 	
 };
 
