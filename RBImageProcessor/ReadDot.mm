@@ -27,6 +27,26 @@ using namespace cv;
 	return self;
 }
 
+- (void)setMinAreaContourFilter:(double)minAreaContourFilter {
+	_readDotProcessor->minAreaContourFilter = minAreaContourFilter;
+}
+
+- (void)setMaxAreaContourFilter:(double)maxAreaContourFilter {
+	_readDotProcessor->maxAreaContourFilter = maxAreaContourFilter;
+}
+
+- (void)setMaxSpaceForGroupingSameRowAndCols:(double)maxSpaceForGroupingSameRowAndCols {
+	_readDotProcessor->maxSpaceForGroupingSameRowAndCols = maxSpaceForGroupingSameRowAndCols;
+}
+
+- (void)setMaxDotSpaceInterDot:(double)maxDotSpaceInterDot {
+	_readDotProcessor->maxDotSpaceInterDot = maxDotSpaceInterDot;
+}
+
+- (void)setDefaultDotSpaceInterDot:(double)defaultDotSpaceInterDot {
+	
+}
+
 - (UIImage *_Nonnull)rawContoursFromImage:(UIImage *_Nonnull)image {
 	Mat opencvImage;
 	UIImageToMat(image, opencvImage);
