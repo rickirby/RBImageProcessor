@@ -14,6 +14,12 @@
 
 - (instancetype _Nonnull)initWithAdaptiveType:(BOOL)adaptiveType adaptiveBlockSize:(NSInteger)adaptiveBlockSize adaptiveConstant:(double)adaptiveConstant dilateIteration:(NSInteger)dilateIteration erodeIteration:(NSInteger)erodeIteration;
 
+- (void)setMinAreaContourFilter:(double)minAreaContourFilter;
+- (void)setMaxAreaContourFilter:(double)maxAreaContourFilter;
+- (void)setMaxSpaceForGroupingSameRowAndCols:(double)maxSpaceForGroupingSameRowAndCols;
+- (void)setMaxDotSpaceInterDot:(double)maxDotSpaceInterDot;
+- (void)setDefaultDotSpaceInterDot:(double)defaultDotSpaceInterDot;
+
 - (UIImage *_Nonnull)rawContoursFromImage:(UIImage *_Nonnull)image;
 - (UIImage *_Nonnull)filteredContoursFromImage:(UIImage *_Nonnull)image;
 - (UIImage *_Nonnull)redrawFromImage:(UIImage *_Nonnull)image;
