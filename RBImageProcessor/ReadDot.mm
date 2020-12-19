@@ -25,13 +25,13 @@ using namespace cv;
 							  dilateIteration:(NSInteger)dilateIteration
 							   erodeIteration:(NSInteger)erodeIteration
 						 minAreaContourFilter:(double)minAreaContourFilter
-						   maxAreaContourSize:(double)maxAreaContourSize
+						 maxAreaContourFilter:(double)maxAreaContourFilter
 							 redrawCircleSize:(double)redrawCircleSize
 			maxSpaceForGroupingSameRowAndCols:(double)maxSpaceForGroupingSameRowAndCols
 						  maxDotSpaceInterDot:(double)maxDotSpaceInterDot
 					  defaultDotSpaceInterDot:(double)defaultDotSpaceInterDot {
 	if ((self = [super init])) {
-		_readDotProcessor = new ReadDotProcessor(adaptiveType, (int) adaptiveBlockSize, adaptiveConstant, (int) dilateIteration, (int) erodeIteration, minAreaContourFilter, maxAreaContourSize, redrawCircleSize, maxSpaceForGroupingSameRowAndCols, maxDotSpaceInterDot, defaultDotSpaceInterDot);
+		_readDotProcessor = new ReadDotProcessor(adaptiveType, (int) adaptiveBlockSize, adaptiveConstant, (int) dilateIteration, (int) erodeIteration, minAreaContourFilter, maxAreaContourFilter, redrawCircleSize, maxSpaceForGroupingSameRowAndCols, maxDotSpaceInterDot, defaultDotSpaceInterDot);
 	}
 	
 	return self;

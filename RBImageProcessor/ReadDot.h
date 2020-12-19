@@ -18,7 +18,7 @@
 							  dilateIteration:(NSInteger)dilateIteration
 							   erodeIteration:(NSInteger)erodeIteration
 						 minAreaContourFilter:(double)minAreaContourFilter
-						   maxAreaContourSize:(double)maxAreaContourSize
+						 maxAreaContourFilter:(double)maxAreaContourFilter
 							 redrawCircleSize:(double)redrawCircleSize
 			maxSpaceForGroupingSameRowAndCols:(double)maxSpaceForGroupingSameRowAndCols
 						  maxDotSpaceInterDot:(double)maxDotSpaceInterDot
