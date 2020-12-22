@@ -10,12 +10,19 @@
 
 // MARK: - Life Cycles
 
-ReadDotProcessor::ReadDotProcessor(bool adaptiveType, int adaptiveBlockSize, double adaptiveConstant, int dilateIteration, int erodeIteration) {
+ReadDotProcessor::ReadDotProcessor(bool adaptiveType, int adaptiveBlockSize, double adaptiveConstant, int dilateIteration, int erodeIteration, double minAreaContourFilter_, double maxAreaContourFilter_, double redrawCircleSize_, double maxSpaceForGroupingSameRowAndCols_, double maxDotSpaceInterDot_, double defaultDotSpaceInterDot_) {
 	_adaptiveType = adaptiveType;
 	_adaptiveBlockSize = adaptiveBlockSize;
 	_adaptiveConstant = adaptiveConstant;
 	_dilateIteration = dilateIteration;
 	_erodeIteration = erodeIteration;
+	
+	minAreaContourFilter = minAreaContourFilter_;
+	maxAreaContourFilter = maxAreaContourFilter_;
+	redrawCircleSize = redrawCircleSize_;
+	maxSpaceForGroupingSameRowAndCols = maxSpaceForGroupingSameRowAndCols_;
+	maxDotSpaceInterDot = maxDotSpaceInterDot_;
+	defaultDotSpaceInterDot = defaultDotSpaceInterDot_;
 }
 
 ReadDotProcessor::~ReadDotProcessor() {
@@ -72,7 +79,7 @@ Mat ReadDotProcessor::filteredContours(Mat image) {
 
 	for (int i = 0; i < contours.size(); i++) {
 		double currentArea = contourArea(contours[i]);
-		if ((currentArea > 200.0) && (currentArea < 500.0)) {
+		if ((currentArea > minAreaContourFilter) && (currentArea < maxAreaContourFilter)) {
 			filteredContours.push_back(contours[i]);
 		}
 	}
@@ -107,7 +114,7 @@ Mat ReadDotProcessor::redraw(Mat image) {
 	
 	for (int i = 0; i < contours.size(); i++) {
 		double currentArea = contourArea(contours[i]);
-		if ((currentArea > 200.0) && (currentArea < 500.0)) {
+		if ((currentArea > minAreaContourFilter) && (currentArea < maxAreaContourFilter)) {
 			filteredContours.push_back(contours[i]);
 		}
 	}
@@ -143,7 +150,7 @@ Mat ReadDotProcessor::redraw(Mat image) {
 	Mat result = Mat::zeros(erodeImage.rows, erodeImage.cols, CV_8UC1);
 	
 	for (unsigned int i = 0; i < centerContoursPoint.size(); i++) {
-		circle(result, centerContoursPoint[i], 10, Scalar::all(255), -1);
+		circle(result, centerContoursPoint[i], redrawCircleSize, Scalar::all(255), -1);
 	}
 	
 	return result;
@@ -171,7 +178,7 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 	
 	for (int i = 0; i < contours.size(); i++) {
 		double currentArea = contourArea(contours[i]);
-		if ((currentArea > 200.0) && (currentArea < 500.0)) {
+		if ((currentArea > minAreaContourFilter) && (currentArea < maxAreaContourFilter)) {
 			filteredContours.push_back(contours[i]);
 		}
 	}
@@ -226,7 +233,7 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 						avgX = coordinatePoint[j].x;
 						coordinatePoint[j].x = -1;
 					} else {
-						if (abs(avgX - coordinatePoint[j].x) < 20) {
+						if (abs(avgX - coordinatePoint[j].x) < maxSpaceForGroupingSameRowAndCols) {
 							gotCols.push_back(coordinatePoint[j].x);
 							avgX = (avgX + coordinatePoint[j].x)/2;
 							coordinatePoint[j].x = -1;
@@ -247,7 +254,7 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 						avgY = coordinatePoint[j].y;
 						coordinatePoint[j].y = -1;
 					} else {
-						if (abs(avgY - coordinatePoint[j].y) < 20) {
+						if (abs(avgY - coordinatePoint[j].y) < maxSpaceForGroupingSameRowAndCols) {
 							gotRows.push_back(coordinatePoint[j].y);
 							avgY = (avgY + coordinatePoint[j].y)/2;
 							coordinatePoint[j].y = -1;
@@ -272,7 +279,7 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 	Mat result = Mat::zeros(erodeImage.rows, erodeImage.cols, CV_8UC1);
 	
 	for (unsigned int i = 0; i < centerContoursPoint.size(); i++) {
-		circle(result, centerContoursPoint[i], 10, Scalar::all(255), -1);
+		circle(result, centerContoursPoint[i], redrawCircleSize, Scalar::all(255), -1);
 	}
 	
 	for (unsigned int i = 0; i < colsGroupAvg.size(); i++) {
@@ -317,7 +324,7 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 	
 	for (int i = 0; i < contours.size(); i++) {
 		double currentArea = contourArea(contours[i]);
-		if ((currentArea > 200.0) && (currentArea < 500.0)) {
+		if ((currentArea > minAreaContourFilter) && (currentArea < maxAreaContourFilter)) {
 			filteredContours.push_back(contours[i]);
 		}
 	}
@@ -397,7 +404,7 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 						avgX = coordinatePoint[j].x;
 						coordinatePoint[j].x = -1;
 					} else {
-						if (abs(avgX - coordinatePoint[j].x) < 20) {
+						if (abs(avgX - coordinatePoint[j].x) < maxSpaceForGroupingSameRowAndCols) {
 							gotCols.push_back(coordinatePoint[j].x);
 							avgX = (avgX + coordinatePoint[j].x)/2;
 							coordinatePoint[j].x = -1;
@@ -418,7 +425,7 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 						avgY = coordinatePoint[j].y;
 						coordinatePoint[j].y = -1;
 					} else {
-						if (abs(avgY - coordinatePoint[j].y) < 20) {
+						if (abs(avgY - coordinatePoint[j].y) < maxSpaceForGroupingSameRowAndCols) {
 							gotRows.push_back(coordinatePoint[j].y);
 							avgY = (avgY + coordinatePoint[j].y)/2;
 							coordinatePoint[j].y = -1;
@@ -481,7 +488,7 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 		vector<int> colPair;
 		
 		if (!shouldSkip) {
-			if ((abs(colsGroupAvg[i] - colsGroupAvg[i + 1]) < 40) && (i < colsGroupAvg.size() - 1)) {
+			if ((abs(colsGroupAvg[i] - colsGroupAvg[i + 1]) < maxDotSpaceInterDot) && (i < colsGroupAvg.size() - 1)) {
 				colPair.push_back(colsGroupAvg[i]);
 				colPair.push_back(colsGroupAvg[i + 1]);
 				
@@ -490,7 +497,7 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 			} else {
 				if (i == 0) {
 					// case for single coordinate found on very first document
-					colPair.push_back(colsGroupAvg[i] - 30);
+					colPair.push_back(colsGroupAvg[i] - defaultDotSpaceInterDot);
 					colPair.push_back(colsGroupAvg[i]);
 					
 					shouldSkip = true;
@@ -498,7 +505,7 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 				} else if (i == colsGroupAvg.size() - 1) {
 					// case for single coordinate found on very end of document
 					colPair.push_back(colsGroupAvg[i]);
-					colPair.push_back(colsGroupAvg[i] + 30);
+					colPair.push_back(colsGroupAvg[i] + defaultDotSpaceInterDot);
 					
 					colsPairs.push_back(colPair);
 				} else {
@@ -517,7 +524,7 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 		vector<int> rowPair;
 		
 		if (shouldSkipCount == 0) {
-			if ((abs(rowsGroupAvg[i] - rowsGroupAvg[i + 1]) < 40) && (i < rowsGroupAvg.size() - 2)) {
+			if ((abs(rowsGroupAvg[i] - rowsGroupAvg[i + 1]) < maxDotSpaceInterDot) && (i < rowsGroupAvg.size() - 2)) {
 				rowPair.push_back(rowsGroupAvg[i]);
 				rowPair.push_back(rowsGroupAvg[i + 1]);
 				rowPair.push_back(rowsGroupAvg[i + 2]);
@@ -527,8 +534,8 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 			} else {
 				if (i == 0) {
 					// case for single coordinate found on very first document
-					rowPair.push_back(rowsGroupAvg[i] - 60);
-					rowPair.push_back(rowsGroupAvg[i] - 30);
+					rowPair.push_back(rowsGroupAvg[i] - (defaultDotSpaceInterDot * 2));
+					rowPair.push_back(rowsGroupAvg[i] - defaultDotSpaceInterDot);
 					rowPair.push_back(rowsGroupAvg[i]);
 					
 					shouldSkipCount++;
@@ -536,8 +543,8 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 				} else if (i == rowsGroupAvg.size() - 1) {
 					// case for single coordinate found on very end of document
 					rowPair.push_back(rowsGroupAvg[i]);
-					rowPair.push_back(rowsGroupAvg[i] + 30);
-					rowPair.push_back(rowsGroupAvg[i] + 60);
+					rowPair.push_back(rowsGroupAvg[i] + defaultDotSpaceInterDot);
+					rowPair.push_back(rowsGroupAvg[i] + (defaultDotSpaceInterDot * 2));
 					
 					rowsPairs.push_back(rowPair);
 				} else {
@@ -577,7 +584,7 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 	Mat result = Mat::zeros(erodeImage.rows, erodeImage.cols, CV_8UC1);
 	
 	for (unsigned int i = 0; i < centerContoursPoint.size(); i++) {
-		circle(result, centerContoursPoint[i], 10, Scalar::all(255), -1);
+		circle(result, centerContoursPoint[i], redrawCircleSize, Scalar::all(255), -1);
 	}
 	
 	for (unsigned int i = 0; i < colsGroupAvg.size(); i++) {
