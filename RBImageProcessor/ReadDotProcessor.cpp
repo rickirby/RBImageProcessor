@@ -79,7 +79,7 @@ Mat ReadDotProcessor::filteredContours(Mat image) {
 
 	for (int i = 0; i < contours.size(); i++) {
 		double currentArea = contourArea(contours[i]);
-		if ((currentArea > 200.0) && (currentArea < 500.0)) {
+		if ((currentArea > minAreaContourFilter) && (currentArea < maxAreaContourFilter)) {
 			filteredContours.push_back(contours[i]);
 		}
 	}
@@ -114,7 +114,7 @@ Mat ReadDotProcessor::redraw(Mat image) {
 	
 	for (int i = 0; i < contours.size(); i++) {
 		double currentArea = contourArea(contours[i]);
-		if ((currentArea > 200.0) && (currentArea < 500.0)) {
+		if ((currentArea > minAreaContourFilter) && (currentArea < maxAreaContourFilter)) {
 			filteredContours.push_back(contours[i]);
 		}
 	}
@@ -150,7 +150,7 @@ Mat ReadDotProcessor::redraw(Mat image) {
 	Mat result = Mat::zeros(erodeImage.rows, erodeImage.cols, CV_8UC1);
 	
 	for (unsigned int i = 0; i < centerContoursPoint.size(); i++) {
-		circle(result, centerContoursPoint[i], 10, Scalar::all(255), -1);
+		circle(result, centerContoursPoint[i], redrawCircleSize, Scalar::all(255), -1);
 	}
 	
 	return result;
@@ -178,7 +178,7 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 	
 	for (int i = 0; i < contours.size(); i++) {
 		double currentArea = contourArea(contours[i]);
-		if ((currentArea > 200.0) && (currentArea < 500.0)) {
+		if ((currentArea > minAreaContourFilter) && (currentArea < maxAreaContourFilter)) {
 			filteredContours.push_back(contours[i]);
 		}
 	}
@@ -233,7 +233,7 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 						avgX = coordinatePoint[j].x;
 						coordinatePoint[j].x = -1;
 					} else {
-						if (abs(avgX - coordinatePoint[j].x) < 20) {
+						if (abs(avgX - coordinatePoint[j].x) < maxSpaceForGroupingSameRowAndCols) {
 							gotCols.push_back(coordinatePoint[j].x);
 							avgX = (avgX + coordinatePoint[j].x)/2;
 							coordinatePoint[j].x = -1;
@@ -254,7 +254,7 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 						avgY = coordinatePoint[j].y;
 						coordinatePoint[j].y = -1;
 					} else {
-						if (abs(avgY - coordinatePoint[j].y) < 20) {
+						if (abs(avgY - coordinatePoint[j].y) < maxSpaceForGroupingSameRowAndCols) {
 							gotRows.push_back(coordinatePoint[j].y);
 							avgY = (avgY + coordinatePoint[j].y)/2;
 							coordinatePoint[j].y = -1;
@@ -279,7 +279,7 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 	Mat result = Mat::zeros(erodeImage.rows, erodeImage.cols, CV_8UC1);
 	
 	for (unsigned int i = 0; i < centerContoursPoint.size(); i++) {
-		circle(result, centerContoursPoint[i], 10, Scalar::all(255), -1);
+		circle(result, centerContoursPoint[i], redrawCircleSize, Scalar::all(255), -1);
 	}
 	
 	for (unsigned int i = 0; i < colsGroupAvg.size(); i++) {
