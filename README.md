@@ -15,4 +15,4 @@ git "git@bitbucket.org:rb-scando/rb_imageprocessor_core_ios.git" == *version-num
 Then "carthage update --use-ssh"
 
 ### Current version:
-0.1.0
+0.1.1
