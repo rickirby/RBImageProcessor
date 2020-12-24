@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+Braille-Char.plist
+RBImageProcessor
+
+Created by Ricki Bin Yamin on 24/12/20.
+Copyright (c) 2020 Ricki Bin Yamin. All rights reserved.
+-->
+<plist version="1.0">
+<dict>
+	<key>key1</key>
+	<string>Eezy</string>
+	<key>key2</key>
+	<string>Tutorials</string>
+</dict>
+</plist>
