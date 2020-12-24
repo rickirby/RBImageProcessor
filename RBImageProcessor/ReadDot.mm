@@ -32,6 +32,10 @@ using namespace cv;
 					  defaultDotSpaceInterDot:(double)defaultDotSpaceInterDot {
 	if ((self = [super init])) {
 		_readDotProcessor = new ReadDotProcessor(adaptiveType, (int) adaptiveBlockSize, adaptiveConstant, (int) dilateIteration, (int) erodeIteration, minAreaContourFilter, maxAreaContourFilter, redrawCircleSize, maxSpaceForGroupingSameRowAndCols, maxDotSpaceInterDot, defaultDotSpaceInterDot);
+		
+		NSString *file = [[NSBundle mainBundle] pathForResource:@"RBImageProcessor.bundle/Braille-Char" ofType:@"plist"];
+		NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:file];
+		NSLog(@"===***===%@",dict); 
 	}
 	
 	return self;
