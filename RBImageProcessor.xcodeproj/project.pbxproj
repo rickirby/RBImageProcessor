@@ -11,7 +11,7 @@
 		096B9F2B257F18A100D9B914 /* ReadDot.mm in Sources */ = {isa = PBXBuildFile; fileRef = 096B9F2A257F18A100D9B914 /* ReadDot.mm */; };
 		0981C87C257E75E600D8A7E4 /* ReadDotProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0981C87A257E75E600D8A7E4 /* ReadDotProcessor.cpp */; };
 		0981C87D257E75E600D8A7E4 /* ReadDotProcessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0981C87B257E75E600D8A7E4 /* ReadDotProcessor.hpp */; };
-		09A7B25B2594EE7600950351 /* RBImageProcessor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 09A7B25A2594EE7600950351 /* RBImageProcessor.bundle */; };
+		09A7B26C2594F1E100950351 /* RBImageProcessor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 09A7B26B2594F1E100950351 /* RBImageProcessor.bundle */; };
 		DC41183D252383E700A38ED5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC41183C252383E700A38ED5 /* CoreGraphics.framework */; };
 		DC41183F252383F500A38ED5 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC41183E252383F500A38ED5 /* AssetsLibrary.framework */; };
 		DC411841252383FE00A38ED5 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC411840252383FE00A38ED5 /* CoreMedia.framework */; };
@@ -32,7 +32,7 @@
 		096B9F2A257F18A100D9B914 /* ReadDot.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ReadDot.mm; sourceTree = "<group>"; };
 		0981C87A257E75E600D8A7E4 /* ReadDotProcessor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ReadDotProcessor.cpp; sourceTree = "<group>"; };
 		0981C87B257E75E600D8A7E4 /* ReadDotProcessor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ReadDotProcessor.hpp; sourceTree = "<group>"; };
-		09A7B25A2594EE7600950351 /* RBImageProcessor.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = RBImageProcessor.bundle; sourceTree = "<group>"; };
+		09A7B26B2594F1E100950351 /* RBImageProcessor.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = RBImageProcessor.bundle; sourceTree = "<group>"; };
 		DC4118342523806000A38ED5 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = Carthage/Build/iOS/opencv2.framework; sourceTree = "<group>"; };
 		DC41183C252383E700A38ED5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		DC41183E252383F500A38ED5 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -68,12 +68,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		09A7B2592594EE2300950351 /* Resources */ = {
+		09A7B26A2594F1BE00950351 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				09A7B25A2594EE7600950351 /* RBImageProcessor.bundle */,
+				09A7B26B2594F1E100950351 /* RBImageProcessor.bundle */,
 			);
-			name = Resources;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		DC4118332523806000A38ED5 /* Frameworks */ = {
@@ -95,7 +95,7 @@
 			children = (
 				DC67E44A2522C8FD0037C91E /* README.md */,
 				DC67E4412522C66F0037C91E /* RBImageProcessor */,
-				09A7B2592594EE2300950351 /* Resources */,
+				09A7B26A2594F1BE00950351 /* Resources */,
 				DC67E4402522C66F0037C91E /* Products */,
 				DC4118332523806000A38ED5 /* Frameworks */,
 			);
@@ -199,7 +199,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				09A7B25B2594EE7600950351 /* RBImageProcessor.bundle in Resources */,
+				09A7B26C2594F1E100950351 /* RBImageProcessor.bundle in Resources */,
 				DC67E44B2522C8FD0037C91E /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
