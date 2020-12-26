@@ -96,9 +96,30 @@ using namespace cv;
 - (UIImage *_Nonnull)segmentationFromImage:(UIImage *_Nonnull)image {
 	Mat opencvImage;
 	UIImageToMat(image, opencvImage);
-	_readDotProcessor->decodeBraille(opencvImage);
 	
 	return MatToUIImage(_readDotProcessor->segmentation(opencvImage));
+}
+
+- (NSString *_Nonnull)translateBrailleFromImage:(UIImage *_Nonnull)image {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	NSString *result = @"";
+	vector<vector<string>> decodedBraille = _readDotProcessor->decodeBraille(opencvImage);
+	
+	for (unsigned int i = 0; i < decodedBraille.size(); i++) {
+		for (unsigned int j = 0; j < decodedBraille[i].size(); j++) {
+			NSString *value = _brailleDictionary[@(decodedBraille[i][j].c_str())];
+			if (value != NULL) {
+				result = [result stringByAppendingString:value];
+			} else {
+				result = [result stringByAppendingString:@"*"];
+			}
+		}
+		result = [result stringByAppendingString:@"\n"];
+	}
+	
+	return result;
 }
 
 @end
