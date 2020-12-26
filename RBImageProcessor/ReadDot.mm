@@ -17,6 +17,7 @@ using namespace cv;
 
 @implementation ReadDot {
 	ReadDotProcessor* _readDotProcessor;
+	NSDictionary *_brailleDictionary;
 }
 
 - (instancetype _Nonnull)initWithAdaptiveType:(BOOL)adaptiveType
@@ -33,9 +34,8 @@ using namespace cv;
 	if ((self = [super init])) {
 		_readDotProcessor = new ReadDotProcessor(adaptiveType, (int) adaptiveBlockSize, adaptiveConstant, (int) dilateIteration, (int) erodeIteration, minAreaContourFilter, maxAreaContourFilter, redrawCircleSize, maxSpaceForGroupingSameRowAndCols, maxDotSpaceInterDot, defaultDotSpaceInterDot);
 		
-		NSString *file = [[NSBundle mainBundle] pathForResource:@"RBImageProcessor.bundle/Braille-Char" ofType:@"plist"];
-		NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:file];
-		NSLog(@"===***===%@",dict); 
+		NSString *brailleCharFile = [[NSBundle mainBundle] pathForResource:@"RBImageProcessor.bundle/Braille-Char" ofType:@"plist"];
+		_brailleDictionary = [NSDictionary dictionaryWithContentsOfFile:brailleCharFile];
 	}
 	
 	return self;
