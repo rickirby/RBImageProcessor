@@ -41,6 +41,7 @@ public:
 	Mat redraw(Mat image);
 	Mat lineCoordinate(Mat image);
 	Mat segmentation(Mat image);
+	vector<vector<string>> translateBraille(Mat image);
 	
 private:
 	

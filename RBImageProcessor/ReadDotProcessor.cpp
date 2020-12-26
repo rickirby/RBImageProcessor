@@ -614,3 +614,218 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 	
 	return result;
 }
+
+vector<vector<string>> ReadDotProcessor::translateBraille(Mat image) {
+	vector<vector<string>> result;
+	Mat gray, adaptiveImage, dilateImage, erodeImage;
+	
+	// Image Pre Processing
+	
+	cvtColor(image, gray, COLOR_BGR2GRAY);
+	adaptiveThreshold(gray, adaptiveImage, 255, _adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, _adaptiveBlockSize, _adaptiveConstant);
+	dilate(adaptiveImage, dilateImage, Mat(), Point(-1, -1), _dilateIteration);
+	erode(dilateImage, erodeImage, Mat(), Point(-1, -1), _erodeIteration);
+	
+	// Blob Analysis
+	
+	vector<vector<Point>> contours;
+	
+	findContours(erodeImage, contours, noArray(), RETR_LIST, CHAIN_APPROX_SIMPLE);
+	
+	// Filtering Contours
+	
+	vector<vector<Point>> filteredContours;
+	
+	for (int i = 0; i < contours.size(); i++) {
+		double currentArea = contourArea(contours[i]);
+		if ((currentArea > minAreaContourFilter) && (currentArea < maxAreaContourFilter)) {
+			filteredContours.push_back(contours[i]);
+		}
+	}
+	
+	// Finding min max coordinate per dot and average them to get center point
+	
+	vector<Point> centerContoursPoint;
+	
+	for (unsigned int i = 0; i < filteredContours.size(); i++) {
+		
+		int minX = filteredContours[i][0].x, minY = filteredContours[i][0].y, maxX = filteredContours[i][0].x, maxY = filteredContours[i][0].y;
+		
+		for (unsigned int j = 0; j < filteredContours[i].size(); j++) {
+			
+			int currentX = filteredContours[i][j].x;
+			int currentY = filteredContours[i][j].y;
+			
+			minX = min(minX, currentX);
+			minY = min(minY, currentY);
+			maxX = max(maxX, currentX);
+			maxY = max(maxY, currentY);
+		}
+		
+		int centerX = (minX + maxX) / 2;
+		int centerY = (minY + maxY) / 2;
+		
+		Point2i centerPoint(centerX, centerY);
+		centerContoursPoint.push_back(centerPoint);
+	}
+	
+	// Grouping centerContoursPoint with same row position and col position, to get the number and coordinate of row and col
+	
+	vector<Point> coordinatePoint = centerContoursPoint;
+	vector<vector<int>> colsGroup;
+	vector<vector<int>> rowsGroup;
+	vector<int> colsGroupAvg;
+	vector<int> rowsGroupAvg;
+	
+	for (unsigned int i = 0; i < coordinatePoint.size(); i++) {
+		
+		vector<int> gotCols;
+		vector<int> gotRows;
+		
+		int avgX = 0;
+		int avgY = 0;
+		
+		if (coordinatePoint[i].x != -1) {
+			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
+				if (coordinatePoint[j].x != -1) {
+					if (j == i) {
+						gotCols.push_back(coordinatePoint[j].x);
+						avgX = coordinatePoint[j].x;
+						coordinatePoint[j].x = -1;
+					} else {
+						if (abs(avgX - coordinatePoint[j].x) < maxSpaceForGroupingSameRowAndCols) {
+							gotCols.push_back(coordinatePoint[j].x);
+							avgX = (avgX + coordinatePoint[j].x)/2;
+							coordinatePoint[j].x = -1;
+						}
+					}
+				}
+			}
+			
+			colsGroup.push_back(gotCols);
+			colsGroupAvg.push_back(avgX);
+		}
+		
+		if (coordinatePoint[i].y != -1) {
+			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
+				if (coordinatePoint[j].y != -1) {
+					if (j == i) {
+						gotRows.push_back(coordinatePoint[j].y);
+						avgY = coordinatePoint[j].y;
+						coordinatePoint[j].y = -1;
+					} else {
+						if (abs(avgY - coordinatePoint[j].y) < maxSpaceForGroupingSameRowAndCols) {
+							gotRows.push_back(coordinatePoint[j].y);
+							avgY = (avgY + coordinatePoint[j].y)/2;
+							coordinatePoint[j].y = -1;
+						}
+					}
+				}
+			}
+			
+			rowsGroup.push_back(gotRows);
+			rowsGroupAvg.push_back(avgY);
+		}
+		
+	}
+	
+	// Sorting colsGroupAvg and rowsGroupAvg
+	
+	sort(colsGroupAvg.begin(), colsGroupAvg.end());
+	sort(rowsGroupAvg.begin(), rowsGroupAvg.end());
+	
+	// Getting coloumn pairs (2) and row pairs (3)
+	
+	vector<vector<int>> colsPairs;
+	vector<vector<int>> rowsPairs;
+	
+	bool shouldSkip = false;
+	int shouldSkipCount = 0;
+	
+	for (unsigned int i = 0; i < colsGroupAvg.size(); i++) {
+		vector<int> colPair;
+		
+		if (!shouldSkip) {
+			if ((abs(colsGroupAvg[i] - colsGroupAvg[i + 1]) < maxDotSpaceInterDot) && (i < colsGroupAvg.size() - 1)) {
+				colPair.push_back(colsGroupAvg[i]);
+				colPair.push_back(colsGroupAvg[i + 1]);
+				
+				shouldSkip = true;
+				colsPairs.push_back(colPair);
+			} else {
+				if (i == 0) {
+					// case for single coordinate found on very first document
+					colPair.push_back(colsGroupAvg[i] - defaultDotSpaceInterDot);
+					colPair.push_back(colsGroupAvg[i]);
+					
+					shouldSkip = true;
+					colsPairs.push_back(colPair);
+				} else if (i == colsGroupAvg.size() - 1) {
+					// case for single coordinate found on very end of document
+					colPair.push_back(colsGroupAvg[i]);
+					colPair.push_back(colsGroupAvg[i] + defaultDotSpaceInterDot);
+					
+					colsPairs.push_back(colPair);
+				} else {
+					// case for single line found beetween the other pairs
+					cout << "not found " << i << endl;
+				}
+			}
+		} else {
+			shouldSkip = false;
+		}
+	}
+	
+	shouldSkip = false;
+	
+	for (unsigned int i = 0; i < rowsGroupAvg.size(); i++) {
+		vector<int> rowPair;
+		
+		if (shouldSkipCount == 0) {
+			if ((abs(rowsGroupAvg[i] - rowsGroupAvg[i + 1]) < maxDotSpaceInterDot) && (i < rowsGroupAvg.size() - 2)) {
+				rowPair.push_back(rowsGroupAvg[i]);
+				rowPair.push_back(rowsGroupAvg[i + 1]);
+				rowPair.push_back(rowsGroupAvg[i + 2]);
+				
+				shouldSkipCount++;
+				rowsPairs.push_back(rowPair);
+			} else {
+				if (i == 0) {
+					// case for single coordinate found on very first document
+					rowPair.push_back(rowsGroupAvg[i] - (defaultDotSpaceInterDot * 2));
+					rowPair.push_back(rowsGroupAvg[i] - defaultDotSpaceInterDot);
+					rowPair.push_back(rowsGroupAvg[i]);
+					
+					shouldSkipCount++;
+					rowsPairs.push_back(rowPair);
+				} else if (i == rowsGroupAvg.size() - 1) {
+					// case for single coordinate found on very end of document
+					rowPair.push_back(rowsGroupAvg[i]);
+					rowPair.push_back(rowsGroupAvg[i] + defaultDotSpaceInterDot);
+					rowPair.push_back(rowsGroupAvg[i] + (defaultDotSpaceInterDot * 2));
+					
+					rowsPairs.push_back(rowPair);
+				} else {
+					// case for single line found beetween the other pairs
+					cout << "not found " << i << endl;
+				}
+			}
+		} else {
+			if (shouldSkipCount > 1) {
+				shouldSkipCount = 0;
+			} else {
+				shouldSkipCount++;
+			}
+		}
+	}
+	
+	// Drawing circle, lines, and rectangle
+	
+	Mat circleImage = Mat::zeros(erodeImage.rows, erodeImage.cols, CV_8UC1);
+	
+	for (unsigned int i = 0; i < centerContoursPoint.size(); i++) {
+		circle(circleImage, centerContoursPoint[i], redrawCircleSize, Scalar::all(255), -1);
+	}
+	
+	return result;
+}
