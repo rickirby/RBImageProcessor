@@ -96,6 +96,7 @@ using namespace cv;
 - (UIImage *_Nonnull)segmentationFromImage:(UIImage *_Nonnull)image {
 	Mat opencvImage;
 	UIImageToMat(image, opencvImage);
+	_readDotProcessor->decodeBraille(opencvImage);
 	
 	return MatToUIImage(_readDotProcessor->segmentation(opencvImage));
 }

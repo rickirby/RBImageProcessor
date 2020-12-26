@@ -615,8 +615,7 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 	return result;
 }
 
-vector<vector<string>> ReadDotProcessor::translateBraille(Mat image) {
-	vector<vector<string>> result;
+vector<vector<string>> ReadDotProcessor::decodeBraille(Mat image) {
 	Mat gray, adaptiveImage, dilateImage, erodeImage;
 	
 	// Image Pre Processing
@@ -819,12 +818,39 @@ vector<vector<string>> ReadDotProcessor::translateBraille(Mat image) {
 		}
 	}
 	
-	// Drawing circle, lines, and rectangle
+	// Drawing circle
 	
 	Mat circleImage = Mat::zeros(erodeImage.rows, erodeImage.cols, CV_8UC1);
 	
 	for (unsigned int i = 0; i < centerContoursPoint.size(); i++) {
 		circle(circleImage, centerContoursPoint[i], redrawCircleSize, Scalar::all(255), -1);
+	}
+	
+	// Reading value of every char
+	vector<vector<string>> result;
+	
+	for (unsigned int row = 0; row < rowsPairs.size(); row++) {
+		vector<string> rowBuffer;
+		for (unsigned int col = 0; col < colsPairs.size(); col++) {
+			string buffer = "";
+			for (unsigned int rowsub = 0; rowsub < rowsPairs[row].size(); rowsub++) {
+				for (unsigned int colsub = 0; colsub < colsPairs[col].size(); colsub++) {
+					int value = circleImage.at<uchar>(rowsPairs[row][rowsub], colsPairs[col][colsub]);
+					buffer += value > 128 ? "1" : "0";
+				}
+			}
+			rowBuffer.push_back(buffer);
+		}
+		result.push_back(rowBuffer);
+	}
+	
+	cout << "===*** Result Debugging" << endl;
+	
+	for (unsigned int i = 0; i < result.size(); i++) {
+		for (unsigned j = 0; j < result[i].size(); j++) {
+			cout << result[i][j] << " ";
+		}
+		cout << endl;
 	}
 	
 	return result;
