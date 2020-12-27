@@ -256,20 +256,24 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 		vector<int> gotCols;
 		vector<int> gotRows;
 		
-		int avgX = 0;
-		int avgY = 0;
+		double avgX = 0;
+		double avgY = 0;
 		
 		if (coordinatePoint[i].x != -1) {
+			int n = 0;
 			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
 				if (coordinatePoint[j].x != -1) {
 					if (j == i) {
 						gotCols.push_back(coordinatePoint[j].x);
 						avgX = coordinatePoint[j].x;
+						n = 0;
 						coordinatePoint[j].x = -1;
 					} else {
 						if (abs(avgX - coordinatePoint[j].x) < _proportionalValue(erodeImage.cols, maxSpaceForGroupingSameRowAndCols)) {
 							gotCols.push_back(coordinatePoint[j].x);
-							avgX = (avgX + coordinatePoint[j].x)/2;
+							double delta = coordinatePoint[j].x - avgX;
+							avgX += delta/++n;
+//							avgX = (avgX + coordinatePoint[j].x)/2;
 							coordinatePoint[j].x = -1;
 						}
 					}
@@ -281,16 +285,20 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 		}
 		
 		if (coordinatePoint[i].y != -1) {
+			int n = 0;
 			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
 				if (coordinatePoint[j].y != -1) {
 					if (j == i) {
 						gotRows.push_back(coordinatePoint[j].y);
 						avgY = coordinatePoint[j].y;
+						n = 0;
 						coordinatePoint[j].y = -1;
 					} else {
 						if (abs(avgY - coordinatePoint[j].y) < _proportionalValue(erodeImage.cols, maxSpaceForGroupingSameRowAndCols)) {
 							gotRows.push_back(coordinatePoint[j].y);
-							avgY = (avgY + coordinatePoint[j].y)/2;
+							double delta = coordinatePoint[j].y - avgY;
+							avgY += delta/++n;
+//							avgY = (avgY + coordinatePoint[j].y)/2;
 							coordinatePoint[j].y = -1;
 						}
 					}
@@ -739,20 +747,24 @@ vector<vector<string>> ReadDotProcessor::decodeBraille(Mat image) {
 		vector<int> gotCols;
 		vector<int> gotRows;
 		
-		int avgX = 0;
-		int avgY = 0;
+		double avgX = 0;
+		double avgY = 0;
 		
 		if (coordinatePoint[i].x != -1) {
+			int n = 0;
 			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
 				if (coordinatePoint[j].x != -1) {
 					if (j == i) {
 						gotCols.push_back(coordinatePoint[j].x);
 						avgX = coordinatePoint[j].x;
+						n = 0;
 						coordinatePoint[j].x = -1;
 					} else {
 						if (abs(avgX - coordinatePoint[j].x) < _proportionalValue(erodeImage.cols, maxSpaceForGroupingSameRowAndCols)) {
 							gotCols.push_back(coordinatePoint[j].x);
-							avgX = (avgX + coordinatePoint[j].x)/2;
+							double delta = coordinatePoint[j].x - avgX;
+							avgX += delta/++n;
+//							avgX = (avgX + coordinatePoint[j].x)/2;
 							coordinatePoint[j].x = -1;
 						}
 					}
@@ -764,16 +776,20 @@ vector<vector<string>> ReadDotProcessor::decodeBraille(Mat image) {
 		}
 		
 		if (coordinatePoint[i].y != -1) {
+			int n = 0;
 			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
 				if (coordinatePoint[j].y != -1) {
 					if (j == i) {
 						gotRows.push_back(coordinatePoint[j].y);
 						avgY = coordinatePoint[j].y;
+						n = 0;
 						coordinatePoint[j].y = -1;
 					} else {
 						if (abs(avgY - coordinatePoint[j].y) < _proportionalValue(erodeImage.cols, maxSpaceForGroupingSameRowAndCols)) {
 							gotRows.push_back(coordinatePoint[j].y);
-							avgY = (avgY + coordinatePoint[j].y)/2;
+							double delta = coordinatePoint[j].y - avgY;
+							avgY += delta/++n;
+//							avgY = (avgY + coordinatePoint[j].y)/2;
 							coordinatePoint[j].y = -1;
 						}
 					}
