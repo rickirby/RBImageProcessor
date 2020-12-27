@@ -52,6 +52,9 @@ private:
 	int _dilateIteration;
 	int _erodeIteration;
 	
+	// MARK: - Private Methods
+	double _proportionalValue(int imageWidth, double value);
+	
 };
 
 #endif /* ReadDotProcessor_hpp */
