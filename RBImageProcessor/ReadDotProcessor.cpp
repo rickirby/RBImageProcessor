@@ -10,7 +10,7 @@
 
 // MARK: - Life Cycles
 
-ReadDotProcessor::ReadDotProcessor(bool adaptiveType, int adaptiveBlockSize, double adaptiveConstant, int dilateIteration, int erodeIteration, double minAreaContourFilter_, double maxAreaContourFilter_, double redrawCircleSize_, double maxSpaceForGroupingSameRowAndCols_, double maxDotSpaceInterDot_, double defaultDotSpaceInterDot_) {
+ReadDotProcessor::ReadDotProcessor(bool adaptiveType, int adaptiveBlockSize, double adaptiveConstant, int dilateIteration, int erodeIteration, double minAreaContourFilter_, double maxAreaContourFilter_, double redrawCircleSize_, double maxSpaceForGroupingSameRowAndCols_, double maxDotSpaceInterDot_, double defaultDotSpaceInterDot_, int cropOffsideX_, int cropOffsideY_) {
 	_adaptiveType = adaptiveType;
 	_adaptiveBlockSize = adaptiveBlockSize;
 	_adaptiveConstant = adaptiveConstant;
@@ -23,6 +23,8 @@ ReadDotProcessor::ReadDotProcessor(bool adaptiveType, int adaptiveBlockSize, dou
 	maxSpaceForGroupingSameRowAndCols = maxSpaceForGroupingSameRowAndCols_;
 	maxDotSpaceInterDot = maxDotSpaceInterDot_;
 	defaultDotSpaceInterDot = defaultDotSpaceInterDot_;
+	cropOffsideX = cropOffsideX_;
+	cropOffsideY = cropOffsideY_;
 }
 
 ReadDotProcessor::~ReadDotProcessor() {
@@ -34,11 +36,18 @@ ReadDotProcessor::~ReadDotProcessor() {
 }
 
 Mat ReadDotProcessor::rawContours(Mat image) {
-	Mat gray, adaptiveImage, dilateImage, erodeImage;
+	Mat croppedImage, gray, adaptiveImage, dilateImage, erodeImage;
+	
+	// Cropping Border
+	int croppedAreaWidth = image.cols - (2 * cropOffsideX);
+	int croppedAreaHeight = image.rows - (2 * cropOffsideY);
+	Rect croppedArea(cropOffsideX, cropOffsideY, croppedAreaWidth, croppedAreaHeight);
+
+	croppedImage = image(croppedArea);
 	
 	// Image Pre Processing
 	
-	cvtColor(image, gray, COLOR_BGR2GRAY);
+	cvtColor(croppedImage, gray, COLOR_BGR2GRAY);
 	adaptiveThreshold(gray, adaptiveImage, 255, _adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, _adaptiveBlockSize, _adaptiveConstant);
 	dilate(adaptiveImage, dilateImage, Mat(), Point(-1, -1), _dilateIteration);
 	erode(dilateImage, erodeImage, Mat(), Point(-1, -1), _erodeIteration);
