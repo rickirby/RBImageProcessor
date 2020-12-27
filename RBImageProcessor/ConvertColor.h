@@ -12,7 +12,13 @@
 
 @interface ConvertColor : NSObject
 
-- (instancetype _Nonnull)initWithAdaptiveType:(BOOL)adaptiveType adaptiveBlockSize:(NSInteger)adaptiveBlockSize adaptiveConstant:(double)adaptiveConstant dilateIteration:(NSInteger)dilateIteration erodeIteration:(NSInteger)erodeIteration;
+- (instancetype _Nonnull)initWithAdaptiveType:(BOOL)adaptiveType
+							adaptiveBlockSize:(NSInteger)adaptiveBlockSize
+							 adaptiveConstant:(double)adaptiveConstant
+							  dilateIteration:(NSInteger)dilateIteration
+							   erodeIteration:(NSInteger)erodeIteration
+								 cropOffsideX:(NSInteger)cropOffsideX
+								 cropOffsideY:(NSInteger)cropOffsideY;
 
 - (void)setAdaptiveType:(BOOL)adaptiveType;
 - (void)setAdaptiveBlockSize:(NSInteger)adaptiveBlockSize;
