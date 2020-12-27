@@ -36,5 +36,6 @@
 - (UIImage *_Nonnull)redrawFromImage:(UIImage *_Nonnull)image;
 - (UIImage *_Nonnull)lineCoordinateFromImage:(UIImage *_Nonnull)image;
 - (UIImage *_Nonnull)segmentationFromImage:(UIImage *_Nonnull)image;
+- (NSString *_Nonnull)translateBrailleFromImage:(UIImage *_Nonnull)image;
 
 @end
