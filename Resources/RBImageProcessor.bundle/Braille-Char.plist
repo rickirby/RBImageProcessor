@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>000000</key>
+	<string> </string>
+	<key>100000</key>
+	<string>A</string>
+	<key>101000</key>
+	<string>B</string>
+	<key>110000</key>
+	<string>C</string>
+	<key>110100</key>
+	<string>D</string>
+	<key>100100</key>
+	<string>E</string>
+	<key>111000</key>
+	<string>F</string>
+	<key>111100</key>
+	<string>G</string>
+	<key>101100</key>
+	<string>H</string>
+	<key>011000</key>
+	<string>I</string>
+	<key>011100</key>
+	<string>J</string>
+	<key>100010</key>
+	<string>K</string>
+	<key>101010</key>
+	<string>L</string>
+	<key>110010</key>
+	<string>M</string>
+	<key>110110</key>
+	<string>N</string>
+	<key>100110</key>
+	<string>O</string>
+	<key>111010</key>
+	<string>P</string>
+	<key>111110</key>
+	<string>Q</string>
+	<key>101110</key>
+	<string>R</string>
+	<key>011010</key>
+	<string>S</string>
+	<key>011110</key>
+	<string>T</string>
+	<key>100011</key>
+	<string>U</string>
+	<key>101011</key>
+	<string>V</string>
+	<key>011101</key>
+	<string>W</string>
+	<key>110011</key>
+	<string>X</string>
+	<key>110111</key>
+	<string>Y</string>
+	<key>100111</key>
+	<string>Z</string>
+	<key>010111</key>
+	<string>#</string>
+</dict>
+</plist>

@@ -17,6 +17,7 @@ using namespace cv;
 
 @implementation ReadDot {
 	ReadDotProcessor* _readDotProcessor;
+	NSDictionary *_brailleDictionary;
 }
 
 - (instancetype _Nonnull)initWithAdaptiveType:(BOOL)adaptiveType
@@ -32,6 +33,9 @@ using namespace cv;
 					  defaultDotSpaceInterDot:(double)defaultDotSpaceInterDot {
 	if ((self = [super init])) {
 		_readDotProcessor = new ReadDotProcessor(adaptiveType, (int) adaptiveBlockSize, adaptiveConstant, (int) dilateIteration, (int) erodeIteration, minAreaContourFilter, maxAreaContourFilter, redrawCircleSize, maxSpaceForGroupingSameRowAndCols, maxDotSpaceInterDot, defaultDotSpaceInterDot);
+		
+		NSString *brailleCharFile = [[NSBundle mainBundle] pathForResource:@"RBImageProcessor.bundle/Braille-Char" ofType:@"plist"];
+		_brailleDictionary = [NSDictionary dictionaryWithContentsOfFile:brailleCharFile];
 	}
 	
 	return self;
@@ -94,6 +98,28 @@ using namespace cv;
 	UIImageToMat(image, opencvImage);
 	
 	return MatToUIImage(_readDotProcessor->segmentation(opencvImage));
+}
+
+- (NSString *_Nonnull)translateBrailleFromImage:(UIImage *_Nonnull)image {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	NSString *result = @"";
+	vector<vector<string>> decodedBraille = _readDotProcessor->decodeBraille(opencvImage);
+	
+	for (unsigned int i = 0; i < decodedBraille.size(); i++) {
+		for (unsigned int j = 0; j < decodedBraille[i].size(); j++) {
+			NSString *value = _brailleDictionary[@(decodedBraille[i][j].c_str())];
+			if (value != NULL) {
+				result = [result stringByAppendingString:value];
+			} else {
+				result = [result stringByAppendingString:@"*"];
+			}
+		}
+		result = [result stringByAppendingString:@"\n"];
+	}
+	
+	return result;
 }
 
 @end
