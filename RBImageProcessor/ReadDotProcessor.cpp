@@ -39,6 +39,7 @@ Mat ReadDotProcessor::rawContours(Mat image) {
 	Mat croppedImage, gray, adaptiveImage, dilateImage, erodeImage;
 	
 	// Cropping Border
+	
 	int croppedAreaWidth = image.cols - (2 * cropOffsideX);
 	int croppedAreaHeight = image.rows - (2 * cropOffsideY);
 	Rect croppedArea(cropOffsideX, cropOffsideY, croppedAreaWidth, croppedAreaHeight);
@@ -67,11 +68,19 @@ Mat ReadDotProcessor::rawContours(Mat image) {
 }
 
 Mat ReadDotProcessor::filteredContours(Mat image) {
-	Mat gray, adaptiveImage, dilateImage, erodeImage;
+	Mat croppedImage, gray, adaptiveImage, dilateImage, erodeImage;
+	
+	// Cropping Border
+	
+	int croppedAreaWidth = image.cols - (2 * cropOffsideX);
+	int croppedAreaHeight = image.rows - (2 * cropOffsideY);
+	Rect croppedArea(cropOffsideX, cropOffsideY, croppedAreaWidth, croppedAreaHeight);
+	
+	croppedImage = image(croppedArea);
 
 	// Image Pre Processing
 
-	cvtColor(image, gray, COLOR_BGR2GRAY);
+	cvtColor(croppedImage, gray, COLOR_BGR2GRAY);
 	adaptiveThreshold(gray, adaptiveImage, 255, _adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, _adaptiveBlockSize, _adaptiveConstant);
 	dilate(adaptiveImage, dilateImage, Mat(), Point(-1, -1), _dilateIteration);
 	erode(dilateImage, erodeImage, Mat(), Point(-1, -1), _erodeIteration);
@@ -102,11 +111,19 @@ Mat ReadDotProcessor::filteredContours(Mat image) {
 }
 
 Mat ReadDotProcessor::redraw(Mat image) {
-	Mat gray, adaptiveImage, dilateImage, erodeImage;
+	Mat croppedImage, gray, adaptiveImage, dilateImage, erodeImage;
+	
+	// Cropping Border
+	
+	int croppedAreaWidth = image.cols - (2 * cropOffsideX);
+	int croppedAreaHeight = image.rows - (2 * cropOffsideY);
+	Rect croppedArea(cropOffsideX, cropOffsideY, croppedAreaWidth, croppedAreaHeight);
+	
+	croppedImage = image(croppedArea);
 	
 	// Image Pre Processing
 	
-	cvtColor(image, gray, COLOR_BGR2GRAY);
+	cvtColor(croppedImage, gray, COLOR_BGR2GRAY);
 	adaptiveThreshold(gray, adaptiveImage, 255, _adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, _adaptiveBlockSize, _adaptiveConstant);
 	dilate(adaptiveImage, dilateImage, Mat(), Point(-1, -1), _dilateIteration);
 	erode(dilateImage, erodeImage, Mat(), Point(-1, -1), _erodeIteration);
@@ -166,11 +183,19 @@ Mat ReadDotProcessor::redraw(Mat image) {
 }
 
 Mat ReadDotProcessor::lineCoordinate(Mat image) {
-	Mat gray, adaptiveImage, dilateImage, erodeImage;
+	Mat croppedImage, gray, adaptiveImage, dilateImage, erodeImage;
+	
+	// Cropping Border
+	
+	int croppedAreaWidth = image.cols - (2 * cropOffsideX);
+	int croppedAreaHeight = image.rows - (2 * cropOffsideY);
+	Rect croppedArea(cropOffsideX, cropOffsideY, croppedAreaWidth, croppedAreaHeight);
+	
+	croppedImage = image(croppedArea);
 	
 	// Image Pre Processing
 	
-	cvtColor(image, gray, COLOR_BGR2GRAY);
+	cvtColor(croppedImage, gray, COLOR_BGR2GRAY);
 	adaptiveThreshold(gray, adaptiveImage, 255, _adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, _adaptiveBlockSize, _adaptiveConstant);
 	dilate(adaptiveImage, dilateImage, Mat(), Point(-1, -1), _dilateIteration);
 	erode(dilateImage, erodeImage, Mat(), Point(-1, -1), _erodeIteration);
@@ -311,11 +336,19 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 }
 
 Mat ReadDotProcessor::segmentation(Mat image) {
-	Mat gray, adaptiveImage, dilateImage, erodeImage;
+	Mat croppedImage, gray, adaptiveImage, dilateImage, erodeImage;
+	
+	// Cropping Border
+	
+	int croppedAreaWidth = image.cols - (2 * cropOffsideX);
+	int croppedAreaHeight = image.rows - (2 * cropOffsideY);
+	Rect croppedArea(cropOffsideX, cropOffsideY, croppedAreaWidth, croppedAreaHeight);
+	
+	croppedImage = image(croppedArea);
 	
 	// Image Pre Processing
 	
-	cvtColor(image, gray, COLOR_BGR2GRAY);
+	cvtColor(croppedImage, gray, COLOR_BGR2GRAY);
 	adaptiveThreshold(gray, adaptiveImage, 255, _adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, _adaptiveBlockSize, _adaptiveConstant);
 	dilate(adaptiveImage, dilateImage, Mat(), Point(-1, -1), _dilateIteration);
 	erode(dilateImage, erodeImage, Mat(), Point(-1, -1), _erodeIteration);
@@ -625,11 +658,19 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 }
 
 vector<vector<string>> ReadDotProcessor::decodeBraille(Mat image) {
-	Mat gray, adaptiveImage, dilateImage, erodeImage;
+	Mat croppedImage, gray, adaptiveImage, dilateImage, erodeImage;
+	
+	// Cropping Border
+	
+	int croppedAreaWidth = image.cols - (2 * cropOffsideX);
+	int croppedAreaHeight = image.rows - (2 * cropOffsideY);
+	Rect croppedArea(cropOffsideX, cropOffsideY, croppedAreaWidth, croppedAreaHeight);
+	
+	croppedImage = image(croppedArea);
 	
 	// Image Pre Processing
 	
-	cvtColor(image, gray, COLOR_BGR2GRAY);
+	cvtColor(croppedImage, gray, COLOR_BGR2GRAY);
 	adaptiveThreshold(gray, adaptiveImage, 255, _adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, _adaptiveBlockSize, _adaptiveConstant);
 	dilate(adaptiveImage, dilateImage, Mat(), Point(-1, -1), _dilateIteration);
 	erode(dilateImage, erodeImage, Mat(), Point(-1, -1), _erodeIteration);
