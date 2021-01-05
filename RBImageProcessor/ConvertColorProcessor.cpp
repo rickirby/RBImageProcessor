@@ -90,6 +90,7 @@ Mat ConvertColorProcessor::adaptiveThreshold(Mat image) {
 	
 	cv::cvtColor(croppedImage, gray, COLOR_BGR2GRAY);
 	cv::adaptiveThreshold(gray, result, 255, adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, adaptiveBlockSize, adaptiveConstant);
+//	cv::threshold(gray, result, 180, 255, THRESH_BINARY);
 	
 	return result;
 }
