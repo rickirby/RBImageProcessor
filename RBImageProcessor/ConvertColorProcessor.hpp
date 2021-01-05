@@ -34,6 +34,7 @@ public:
 	
 	// MARK: - Public Methods
 	
+	Mat cropImage(Mat image);
 	Mat convertToGRAY(Mat image);
 	Mat convertToHSV(Mat image);
 	Mat convertToBW(Mat image);

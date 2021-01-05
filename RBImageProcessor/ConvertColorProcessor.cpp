@@ -18,6 +18,16 @@ ConvertColorProcessor::ConvertColorProcessor(bool adaptiveType_, int adaptiveBlo
 	cropOffsideY = cropOffsideY_;
 }
 
+Mat ConvertColorProcessor::cropImage(Mat image) {
+	int croppedAreaWidth = image.cols - (2 * cropOffsideX);
+	int croppedAreaHeight = image.rows - (2 * cropOffsideY);
+	Rect croppedArea(cropOffsideX, cropOffsideY, croppedAreaWidth, croppedAreaHeight);
+	
+	Mat croppedImage = image(croppedArea);
+	
+	return croppedImage;
+}
+
 Mat ConvertColorProcessor::convertToGRAY(Mat image) {
 	Mat croppedImage, gray;
 	

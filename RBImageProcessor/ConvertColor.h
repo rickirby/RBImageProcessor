@@ -26,6 +26,7 @@
 - (void)setDilateIteration:(NSInteger)dilateIteration;
 - (void)setErodeIteration:(NSInteger)erodeIteration;
 
+- (UIImage *_Nonnull)makeCroppedFromImage:(UIImage *_Nonnull)image;
 - (UIImage *_Nonnull)makeGrayFromImage:(UIImage *_Nonnull)image;
 - (UIImage *_Nonnull)makeHSVFromImage:(UIImage *_Nonnull)image;
 - (UIImage *_Nonnull)makeBWFromImage:(UIImage *_Nonnull)image;

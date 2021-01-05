@@ -53,6 +53,13 @@ using namespace cv;
 	_convertColorProcessor->erodeIteration = (int) erodeIteration;
 }
 
+- (UIImage *_Nonnull)makeCroppedFromImage:(UIImage *_Nonnull)image {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(_convertColorProcessor->cropImage(opencvImage));
+}
+
 - (UIImage *)makeGrayFromImage:(UIImage *)image {
 	Mat opencvImage;
 	UIImageToMat(image, opencvImage);
