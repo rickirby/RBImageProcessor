@@ -115,10 +115,10 @@ using namespace cv;
 			if (value != NULL) {
 				result = [result stringByAppendingString:value];
 			} else {
-				result = [result stringByAppendingString:@"*"];
+				result = [result stringByAppendingString:@" "];
 			}
 		}
-		result = [result stringByAppendingString:@"\n"];
+		result = [result stringByAppendingString:@"\r\n"];
 	}
 	
 	return result;
