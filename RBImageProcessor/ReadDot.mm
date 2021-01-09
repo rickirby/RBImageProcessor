@@ -115,6 +115,12 @@ using namespace cv;
 			if (value != NULL) {
 				result = [result stringByAppendingString:value];
 			} else {
+				result = [result stringByAppendingString:@"#"];
+			}
+			int colSize = (int)decodedBraille[0].size();
+			if (colSize <= 15) {
+				result = [result stringByAppendingString:@"  "];
+			} else if (colSize > 15 && colSize < 20) {
 				result = [result stringByAppendingString:@" "];
 			}
 		}
