@@ -19,7 +19,7 @@ public:
 	
 	// MARK: - Life Cycles
 	
-	ConvertColorProcessor(bool adaptiveType_, int adaptiveBlockSize_, double adaptiveConstant_, int dilateIteration_, int erodeIteration_);
+	ConvertColorProcessor(bool adaptiveType_, int adaptiveBlockSize_, double adaptiveConstant_, int dilateIteration_, int erodeIteration_, int cropOffsideX_, int cropOffsideY_);
 	~ConvertColorProcessor();
 	
 	// MARK: - Public Properties
@@ -29,9 +29,12 @@ public:
 	double adaptiveConstant;
 	int dilateIteration;
 	int erodeIteration;
+	int cropOffsideX;
+	int cropOffsideY;
 	
 	// MARK: - Public Methods
 	
+	Mat cropImage(Mat image);
 	Mat convertToGRAY(Mat image);
 	Mat convertToHSV(Mat image);
 	Mat convertToBW(Mat image);

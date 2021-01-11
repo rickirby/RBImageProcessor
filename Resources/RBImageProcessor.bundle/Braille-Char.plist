@@ -5,57 +5,57 @@
 	<key>000000</key>
 	<string> </string>
 	<key>100000</key>
-	<string>A</string>
+	<string>a</string>
 	<key>101000</key>
-	<string>B</string>
+	<string>b</string>
 	<key>110000</key>
-	<string>C</string>
+	<string>c</string>
 	<key>110100</key>
-	<string>D</string>
+	<string>d</string>
 	<key>100100</key>
-	<string>E</string>
+	<string>e</string>
 	<key>111000</key>
-	<string>F</string>
+	<string>f</string>
 	<key>111100</key>
-	<string>G</string>
+	<string>g</string>
 	<key>101100</key>
-	<string>H</string>
+	<string>h</string>
 	<key>011000</key>
-	<string>I</string>
+	<string>i</string>
 	<key>011100</key>
-	<string>J</string>
+	<string>j</string>
 	<key>100010</key>
-	<string>K</string>
+	<string>k</string>
 	<key>101010</key>
-	<string>L</string>
+	<string>l</string>
 	<key>110010</key>
-	<string>M</string>
+	<string>m</string>
 	<key>110110</key>
-	<string>N</string>
+	<string>n</string>
 	<key>100110</key>
-	<string>O</string>
+	<string>o</string>
 	<key>111010</key>
-	<string>P</string>
+	<string>p</string>
 	<key>111110</key>
-	<string>Q</string>
+	<string>q</string>
 	<key>101110</key>
-	<string>R</string>
+	<string>r</string>
 	<key>011010</key>
-	<string>S</string>
+	<string>s</string>
 	<key>011110</key>
-	<string>T</string>
+	<string>t</string>
 	<key>100011</key>
-	<string>U</string>
+	<string>u</string>
 	<key>101011</key>
-	<string>V</string>
+	<string>v</string>
 	<key>011101</key>
-	<string>W</string>
+	<string>w</string>
 	<key>110011</key>
-	<string>X</string>
+	<string>x</string>
 	<key>110111</key>
-	<string>Y</string>
+	<string>y</string>
 	<key>100111</key>
-	<string>Z</string>
+	<string>z</string>
 	<key>010111</key>
 	<string>#</string>
 </dict>

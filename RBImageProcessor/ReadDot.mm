@@ -30,9 +30,11 @@ using namespace cv;
 							 redrawCircleSize:(double)redrawCircleSize
 			maxSpaceForGroupingSameRowAndCols:(double)maxSpaceForGroupingSameRowAndCols
 						  maxDotSpaceInterDot:(double)maxDotSpaceInterDot
-					  defaultDotSpaceInterDot:(double)defaultDotSpaceInterDot {
+					  defaultDotSpaceInterDot:(double)defaultDotSpaceInterDot
+								 cropOffsideX:(NSInteger)cropOffsideX
+								 cropOffsideY:(NSInteger)cropOffsideY {
 	if ((self = [super init])) {
-		_readDotProcessor = new ReadDotProcessor(adaptiveType, (int) adaptiveBlockSize, adaptiveConstant, (int) dilateIteration, (int) erodeIteration, minAreaContourFilter, maxAreaContourFilter, redrawCircleSize, maxSpaceForGroupingSameRowAndCols, maxDotSpaceInterDot, defaultDotSpaceInterDot);
+		_readDotProcessor = new ReadDotProcessor(adaptiveType, (int) adaptiveBlockSize, adaptiveConstant, (int) dilateIteration, (int) erodeIteration, minAreaContourFilter, maxAreaContourFilter, redrawCircleSize, maxSpaceForGroupingSameRowAndCols, maxDotSpaceInterDot, defaultDotSpaceInterDot, (int) cropOffsideX, (int) cropOffsideY);
 		
 		NSString *brailleCharFile = [[NSBundle mainBundle] pathForResource:@"RBImageProcessor.bundle/Braille-Char" ofType:@"plist"];
 		_brailleDictionary = [NSDictionary dictionaryWithContentsOfFile:brailleCharFile];
@@ -113,10 +115,16 @@ using namespace cv;
 			if (value != NULL) {
 				result = [result stringByAppendingString:value];
 			} else {
-				result = [result stringByAppendingString:@"*"];
+				result = [result stringByAppendingString:@"#"];
+			}
+			int colSize = (int)decodedBraille[0].size();
+			if (colSize <= 15) {
+				result = [result stringByAppendingString:@"  "];
+			} else if (colSize > 15 && colSize < 20) {
+				result = [result stringByAppendingString:@" "];
 			}
 		}
-		result = [result stringByAppendingString:@"\n"];
+		result = [result stringByAppendingString:@"\r\n"];
 	}
 	
 	return result;
