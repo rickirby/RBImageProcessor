@@ -22,7 +22,7 @@ public:
 	
 	// MARK: - Life Cycles
 	
-	ReadDotProcessor(bool adaptiveType, int adaptiveBlockSize, double adaptiveConstant, int dilateIteration, int erodeIteration, double minAreaContourFilter_, double maxAreaContourFilter_, double redrawCircleSize_, double maxSpaceForGroupingSameRowAndCols_, double maxDotSpaceInterDot_, double defaultDotSpaceInterDot_);
+	ReadDotProcessor(bool adaptiveType, int adaptiveBlockSize, double adaptiveConstant, int dilateIteration, int erodeIteration, double minAreaContourFilter_, double maxAreaContourFilter_, double redrawCircleSize_, double maxSpaceForGroupingSameRowAndCols_, double maxDotSpaceInterDot_, double defaultDotSpaceInterDot_, int cropOffsideX_, int cropOffsideY_);
 	~ReadDotProcessor();
 	
 	// MARK: - Public Properties
@@ -33,6 +33,8 @@ public:
 	double maxSpaceForGroupingSameRowAndCols;
 	double maxDotSpaceInterDot;
 	double defaultDotSpaceInterDot;
+	int cropOffsideX;
+	int cropOffsideY;
 	
 	// MARK: - Public Methods
 	
