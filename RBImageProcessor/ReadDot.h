@@ -22,7 +22,9 @@
 							 redrawCircleSize:(double)redrawCircleSize
 			maxSpaceForGroupingSameRowAndCols:(double)maxSpaceForGroupingSameRowAndCols
 						  maxDotSpaceInterDot:(double)maxDotSpaceInterDot
-					  defaultDotSpaceInterDot:(double)defaultDotSpaceInterDot;
+					  defaultDotSpaceInterDot:(double)defaultDotSpaceInterDot
+								 cropOffsideX:(NSInteger)cropOffsideX
+								 cropOffsideY:(NSInteger)cropOffsideY;
 
 - (void)setMinAreaContourFilter:(double)minAreaContourFilter;
 - (void)setMaxAreaContourFilter:(double)maxAreaContourFilter;

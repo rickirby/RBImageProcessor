@@ -10,7 +10,7 @@
 
 // MARK: - Life Cycles
 
-ReadDotProcessor::ReadDotProcessor(bool adaptiveType, int adaptiveBlockSize, double adaptiveConstant, int dilateIteration, int erodeIteration, double minAreaContourFilter_, double maxAreaContourFilter_, double redrawCircleSize_, double maxSpaceForGroupingSameRowAndCols_, double maxDotSpaceInterDot_, double defaultDotSpaceInterDot_) {
+ReadDotProcessor::ReadDotProcessor(bool adaptiveType, int adaptiveBlockSize, double adaptiveConstant, int dilateIteration, int erodeIteration, double minAreaContourFilter_, double maxAreaContourFilter_, double redrawCircleSize_, double maxSpaceForGroupingSameRowAndCols_, double maxDotSpaceInterDot_, double defaultDotSpaceInterDot_, int cropOffsideX_, int cropOffsideY_) {
 	_adaptiveType = adaptiveType;
 	_adaptiveBlockSize = adaptiveBlockSize;
 	_adaptiveConstant = adaptiveConstant;
@@ -23,6 +23,8 @@ ReadDotProcessor::ReadDotProcessor(bool adaptiveType, int adaptiveBlockSize, dou
 	maxSpaceForGroupingSameRowAndCols = maxSpaceForGroupingSameRowAndCols_;
 	maxDotSpaceInterDot = maxDotSpaceInterDot_;
 	defaultDotSpaceInterDot = defaultDotSpaceInterDot_;
+	cropOffsideX = cropOffsideX_;
+	cropOffsideY = cropOffsideY_;
 }
 
 ReadDotProcessor::~ReadDotProcessor() {
@@ -34,11 +36,19 @@ ReadDotProcessor::~ReadDotProcessor() {
 }
 
 Mat ReadDotProcessor::rawContours(Mat image) {
-	Mat gray, adaptiveImage, dilateImage, erodeImage;
+	Mat croppedImage, gray, adaptiveImage, dilateImage, erodeImage;
+	
+	// Cropping Border
+	
+	int croppedAreaWidth = image.cols - (2 * cropOffsideX);
+	int croppedAreaHeight = image.rows - (2 * cropOffsideY);
+	Rect croppedArea(cropOffsideX, cropOffsideY, croppedAreaWidth, croppedAreaHeight);
+
+	croppedImage = image(croppedArea);
 	
 	// Image Pre Processing
 	
-	cvtColor(image, gray, COLOR_BGR2GRAY);
+	cvtColor(croppedImage, gray, COLOR_BGR2GRAY);
 	adaptiveThreshold(gray, adaptiveImage, 255, _adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, _adaptiveBlockSize, _adaptiveConstant);
 	dilate(adaptiveImage, dilateImage, Mat(), Point(-1, -1), _dilateIteration);
 	erode(dilateImage, erodeImage, Mat(), Point(-1, -1), _erodeIteration);
@@ -58,11 +68,19 @@ Mat ReadDotProcessor::rawContours(Mat image) {
 }
 
 Mat ReadDotProcessor::filteredContours(Mat image) {
-	Mat gray, adaptiveImage, dilateImage, erodeImage;
+	Mat croppedImage, gray, adaptiveImage, dilateImage, erodeImage;
+	
+	// Cropping Border
+	
+	int croppedAreaWidth = image.cols - (2 * cropOffsideX);
+	int croppedAreaHeight = image.rows - (2 * cropOffsideY);
+	Rect croppedArea(cropOffsideX, cropOffsideY, croppedAreaWidth, croppedAreaHeight);
+	
+	croppedImage = image(croppedArea);
 
 	// Image Pre Processing
 
-	cvtColor(image, gray, COLOR_BGR2GRAY);
+	cvtColor(croppedImage, gray, COLOR_BGR2GRAY);
 	adaptiveThreshold(gray, adaptiveImage, 255, _adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, _adaptiveBlockSize, _adaptiveConstant);
 	dilate(adaptiveImage, dilateImage, Mat(), Point(-1, -1), _dilateIteration);
 	erode(dilateImage, erodeImage, Mat(), Point(-1, -1), _erodeIteration);
@@ -79,7 +97,7 @@ Mat ReadDotProcessor::filteredContours(Mat image) {
 
 	for (int i = 0; i < contours.size(); i++) {
 		double currentArea = contourArea(contours[i]);
-		if ((currentArea > minAreaContourFilter) && (currentArea < maxAreaContourFilter)) {
+		if ((currentArea > _proportionalValue(erodeImage.cols, minAreaContourFilter)) && (currentArea < _proportionalValue(erodeImage.cols, maxAreaContourFilter))) {
 			filteredContours.push_back(contours[i]);
 		}
 	}
@@ -93,11 +111,19 @@ Mat ReadDotProcessor::filteredContours(Mat image) {
 }
 
 Mat ReadDotProcessor::redraw(Mat image) {
-	Mat gray, adaptiveImage, dilateImage, erodeImage;
+	Mat croppedImage, gray, adaptiveImage, dilateImage, erodeImage;
+	
+	// Cropping Border
+	
+	int croppedAreaWidth = image.cols - (2 * cropOffsideX);
+	int croppedAreaHeight = image.rows - (2 * cropOffsideY);
+	Rect croppedArea(cropOffsideX, cropOffsideY, croppedAreaWidth, croppedAreaHeight);
+	
+	croppedImage = image(croppedArea);
 	
 	// Image Pre Processing
 	
-	cvtColor(image, gray, COLOR_BGR2GRAY);
+	cvtColor(croppedImage, gray, COLOR_BGR2GRAY);
 	adaptiveThreshold(gray, adaptiveImage, 255, _adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, _adaptiveBlockSize, _adaptiveConstant);
 	dilate(adaptiveImage, dilateImage, Mat(), Point(-1, -1), _dilateIteration);
 	erode(dilateImage, erodeImage, Mat(), Point(-1, -1), _erodeIteration);
@@ -114,7 +140,7 @@ Mat ReadDotProcessor::redraw(Mat image) {
 	
 	for (int i = 0; i < contours.size(); i++) {
 		double currentArea = contourArea(contours[i]);
-		if ((currentArea > minAreaContourFilter) && (currentArea < maxAreaContourFilter)) {
+		if ((currentArea > _proportionalValue(erodeImage.cols, minAreaContourFilter)) && (currentArea < _proportionalValue(erodeImage.cols, maxAreaContourFilter))) {
 			filteredContours.push_back(contours[i]);
 		}
 	}
@@ -150,18 +176,26 @@ Mat ReadDotProcessor::redraw(Mat image) {
 	Mat result = Mat::zeros(erodeImage.rows, erodeImage.cols, CV_8UC1);
 	
 	for (unsigned int i = 0; i < centerContoursPoint.size(); i++) {
-		circle(result, centerContoursPoint[i], redrawCircleSize, Scalar::all(255), -1);
+		circle(result, centerContoursPoint[i], _proportionalValue(erodeImage.cols, redrawCircleSize), Scalar::all(255), -1);
 	}
 	
 	return result;
 }
 
 Mat ReadDotProcessor::lineCoordinate(Mat image) {
-	Mat gray, adaptiveImage, dilateImage, erodeImage;
+	Mat croppedImage, gray, adaptiveImage, dilateImage, erodeImage;
+	
+	// Cropping Border
+	
+	int croppedAreaWidth = image.cols - (2 * cropOffsideX);
+	int croppedAreaHeight = image.rows - (2 * cropOffsideY);
+	Rect croppedArea(cropOffsideX, cropOffsideY, croppedAreaWidth, croppedAreaHeight);
+	
+	croppedImage = image(croppedArea);
 	
 	// Image Pre Processing
 	
-	cvtColor(image, gray, COLOR_BGR2GRAY);
+	cvtColor(croppedImage, gray, COLOR_BGR2GRAY);
 	adaptiveThreshold(gray, adaptiveImage, 255, _adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, _adaptiveBlockSize, _adaptiveConstant);
 	dilate(adaptiveImage, dilateImage, Mat(), Point(-1, -1), _dilateIteration);
 	erode(dilateImage, erodeImage, Mat(), Point(-1, -1), _erodeIteration);
@@ -178,7 +212,7 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 	
 	for (int i = 0; i < contours.size(); i++) {
 		double currentArea = contourArea(contours[i]);
-		if ((currentArea > minAreaContourFilter) && (currentArea < maxAreaContourFilter)) {
+		if ((currentArea > _proportionalValue(erodeImage.cols, minAreaContourFilter)) && (currentArea < _proportionalValue(erodeImage.cols, maxAreaContourFilter))) {
 			filteredContours.push_back(contours[i]);
 		}
 	}
@@ -222,20 +256,24 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 		vector<int> gotCols;
 		vector<int> gotRows;
 		
-		int avgX = 0;
-		int avgY = 0;
+		double avgX = 0;
+		double avgY = 0;
 		
 		if (coordinatePoint[i].x != -1) {
+			int n = 0;
 			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
 				if (coordinatePoint[j].x != -1) {
 					if (j == i) {
 						gotCols.push_back(coordinatePoint[j].x);
 						avgX = coordinatePoint[j].x;
+						n = 0;
 						coordinatePoint[j].x = -1;
 					} else {
-						if (abs(avgX - coordinatePoint[j].x) < maxSpaceForGroupingSameRowAndCols) {
+						if (abs(avgX - coordinatePoint[j].x) < _proportionalValue(erodeImage.cols, maxSpaceForGroupingSameRowAndCols)) {
 							gotCols.push_back(coordinatePoint[j].x);
-							avgX = (avgX + coordinatePoint[j].x)/2;
+							double delta = coordinatePoint[j].x - avgX;
+							avgX += delta/++n;
+//							avgX = (avgX + coordinatePoint[j].x)/2;
 							coordinatePoint[j].x = -1;
 						}
 					}
@@ -247,16 +285,20 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 		}
 		
 		if (coordinatePoint[i].y != -1) {
+			int n = 0;
 			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
 				if (coordinatePoint[j].y != -1) {
 					if (j == i) {
 						gotRows.push_back(coordinatePoint[j].y);
 						avgY = coordinatePoint[j].y;
+						n = 0;
 						coordinatePoint[j].y = -1;
 					} else {
-						if (abs(avgY - coordinatePoint[j].y) < maxSpaceForGroupingSameRowAndCols) {
+						if (abs(avgY - coordinatePoint[j].y) < _proportionalValue(erodeImage.cols, maxSpaceForGroupingSameRowAndCols)) {
 							gotRows.push_back(coordinatePoint[j].y);
-							avgY = (avgY + coordinatePoint[j].y)/2;
+							double delta = coordinatePoint[j].y - avgY;
+							avgY += delta/++n;
+//							avgY = (avgY + coordinatePoint[j].y)/2;
 							coordinatePoint[j].y = -1;
 						}
 					}
@@ -279,7 +321,7 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 	Mat result = Mat::zeros(erodeImage.rows, erodeImage.cols, CV_8UC1);
 	
 	for (unsigned int i = 0; i < centerContoursPoint.size(); i++) {
-		circle(result, centerContoursPoint[i], redrawCircleSize, Scalar::all(255), -1);
+		circle(result, centerContoursPoint[i], _proportionalValue(erodeImage.cols, redrawCircleSize), Scalar::all(255), -1);
 	}
 	
 	for (unsigned int i = 0; i < colsGroupAvg.size(); i++) {
@@ -302,11 +344,19 @@ Mat ReadDotProcessor::lineCoordinate(Mat image) {
 }
 
 Mat ReadDotProcessor::segmentation(Mat image) {
-	Mat gray, adaptiveImage, dilateImage, erodeImage;
+	Mat croppedImage, gray, adaptiveImage, dilateImage, erodeImage;
+	
+	// Cropping Border
+	
+	int croppedAreaWidth = image.cols - (2 * cropOffsideX);
+	int croppedAreaHeight = image.rows - (2 * cropOffsideY);
+	Rect croppedArea(cropOffsideX, cropOffsideY, croppedAreaWidth, croppedAreaHeight);
+	
+	croppedImage = image(croppedArea);
 	
 	// Image Pre Processing
 	
-	cvtColor(image, gray, COLOR_BGR2GRAY);
+	cvtColor(croppedImage, gray, COLOR_BGR2GRAY);
 	adaptiveThreshold(gray, adaptiveImage, 255, _adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, _adaptiveBlockSize, _adaptiveConstant);
 	dilate(adaptiveImage, dilateImage, Mat(), Point(-1, -1), _dilateIteration);
 	erode(dilateImage, erodeImage, Mat(), Point(-1, -1), _erodeIteration);
@@ -324,7 +374,7 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 	
 	for (int i = 0; i < contours.size(); i++) {
 		double currentArea = contourArea(contours[i]);
-		if ((currentArea > minAreaContourFilter) && (currentArea < maxAreaContourFilter)) {
+		if ((currentArea > _proportionalValue(erodeImage.cols, minAreaContourFilter)) && (currentArea < _proportionalValue(erodeImage.cols, maxAreaContourFilter))) {
 			filteredContours.push_back(contours[i]);
 		}
 	}
@@ -393,20 +443,24 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 		vector<int> gotCols;
 		vector<int> gotRows;
 		
-		int avgX = 0;
-		int avgY = 0;
+		double avgX = 0;
+		double avgY = 0;
 		
 		if (coordinatePoint[i].x != -1) {
+			int n = 0;
 			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
 				if (coordinatePoint[j].x != -1) {
 					if (j == i) {
 						gotCols.push_back(coordinatePoint[j].x);
 						avgX = coordinatePoint[j].x;
+						n = 0;
 						coordinatePoint[j].x = -1;
 					} else {
-						if (abs(avgX - coordinatePoint[j].x) < maxSpaceForGroupingSameRowAndCols) {
+						if (abs(avgX - coordinatePoint[j].x) < _proportionalValue(erodeImage.cols, maxSpaceForGroupingSameRowAndCols)) {
 							gotCols.push_back(coordinatePoint[j].x);
-							avgX = (avgX + coordinatePoint[j].x)/2;
+							double delta = coordinatePoint[j].x - avgX;
+							avgX += delta/++n;
+//							avgX = (avgX + coordinatePoint[j].x)/2;
 							coordinatePoint[j].x = -1;
 						}
 					}
@@ -418,16 +472,20 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 		}
 		
 		if (coordinatePoint[i].y != -1) {
+			int n = 0;
 			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
 				if (coordinatePoint[j].y != -1) {
 					if (j == i) {
 						gotRows.push_back(coordinatePoint[j].y);
 						avgY = coordinatePoint[j].y;
+						n = 0;
 						coordinatePoint[j].y = -1;
 					} else {
-						if (abs(avgY - coordinatePoint[j].y) < maxSpaceForGroupingSameRowAndCols) {
+						if (abs(avgY - coordinatePoint[j].y) < _proportionalValue(erodeImage.cols, maxSpaceForGroupingSameRowAndCols)) {
 							gotRows.push_back(coordinatePoint[j].y);
-							avgY = (avgY + coordinatePoint[j].y)/2;
+							double delta = coordinatePoint[j].y - avgY;
+							avgY += delta/++n;
+//							avgY = (avgY + coordinatePoint[j].y)/2;
 							coordinatePoint[j].y = -1;
 						}
 					}
@@ -488,7 +546,7 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 		vector<int> colPair;
 		
 		if (!shouldSkip) {
-			if ((abs(colsGroupAvg[i] - colsGroupAvg[i + 1]) < maxDotSpaceInterDot) && (i < colsGroupAvg.size() - 1)) {
+			if ((abs(colsGroupAvg[i] - colsGroupAvg[i + 1]) < _proportionalValue(erodeImage.cols, maxDotSpaceInterDot)) && (i < colsGroupAvg.size() - 1)) {
 				colPair.push_back(colsGroupAvg[i]);
 				colPair.push_back(colsGroupAvg[i + 1]);
 				
@@ -497,7 +555,7 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 			} else {
 				if (i == 0) {
 					// case for single coordinate found on very first document
-					colPair.push_back(colsGroupAvg[i] - defaultDotSpaceInterDot);
+					colPair.push_back(colsGroupAvg[i] - _proportionalValue(erodeImage.cols, defaultDotSpaceInterDot));
 					colPair.push_back(colsGroupAvg[i]);
 					
 					shouldSkip = true;
@@ -505,7 +563,7 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 				} else if (i == colsGroupAvg.size() - 1) {
 					// case for single coordinate found on very end of document
 					colPair.push_back(colsGroupAvg[i]);
-					colPair.push_back(colsGroupAvg[i] + defaultDotSpaceInterDot);
+					colPair.push_back(colsGroupAvg[i] + _proportionalValue(erodeImage.cols, defaultDotSpaceInterDot));
 					
 					colsPairs.push_back(colPair);
 				} else {
@@ -524,7 +582,7 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 		vector<int> rowPair;
 		
 		if (shouldSkipCount == 0) {
-			if ((abs(rowsGroupAvg[i] - rowsGroupAvg[i + 1]) < maxDotSpaceInterDot) && (i < rowsGroupAvg.size() - 2)) {
+			if ((abs(rowsGroupAvg[i] - rowsGroupAvg[i + 1]) < _proportionalValue(erodeImage.cols, maxDotSpaceInterDot)) && (i < rowsGroupAvg.size() - 2)) {
 				rowPair.push_back(rowsGroupAvg[i]);
 				rowPair.push_back(rowsGroupAvg[i + 1]);
 				rowPair.push_back(rowsGroupAvg[i + 2]);
@@ -534,8 +592,8 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 			} else {
 				if (i == 0) {
 					// case for single coordinate found on very first document
-					rowPair.push_back(rowsGroupAvg[i] - (defaultDotSpaceInterDot * 2));
-					rowPair.push_back(rowsGroupAvg[i] - defaultDotSpaceInterDot);
+					rowPair.push_back(rowsGroupAvg[i] - (_proportionalValue(erodeImage.cols, defaultDotSpaceInterDot) * 2));
+					rowPair.push_back(rowsGroupAvg[i] - _proportionalValue(erodeImage.cols, defaultDotSpaceInterDot));
 					rowPair.push_back(rowsGroupAvg[i]);
 					
 					shouldSkipCount++;
@@ -543,8 +601,8 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 				} else if (i == rowsGroupAvg.size() - 1) {
 					// case for single coordinate found on very end of document
 					rowPair.push_back(rowsGroupAvg[i]);
-					rowPair.push_back(rowsGroupAvg[i] + defaultDotSpaceInterDot);
-					rowPair.push_back(rowsGroupAvg[i] + (defaultDotSpaceInterDot * 2));
+					rowPair.push_back(rowsGroupAvg[i] + _proportionalValue(erodeImage.cols, defaultDotSpaceInterDot));
+					rowPair.push_back(rowsGroupAvg[i] + (_proportionalValue(erodeImage.cols, defaultDotSpaceInterDot) * 2));
 					
 					rowsPairs.push_back(rowPair);
 				} else {
@@ -584,7 +642,7 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 	Mat result = Mat::zeros(erodeImage.rows, erodeImage.cols, CV_8UC1);
 	
 	for (unsigned int i = 0; i < centerContoursPoint.size(); i++) {
-		circle(result, centerContoursPoint[i], redrawCircleSize, Scalar::all(255), -1);
+		circle(result, centerContoursPoint[i], _proportionalValue(erodeImage.cols, redrawCircleSize), Scalar::all(255), -1);
 	}
 	
 	for (unsigned int i = 0; i < colsGroupAvg.size(); i++) {
@@ -616,11 +674,19 @@ Mat ReadDotProcessor::segmentation(Mat image) {
 }
 
 vector<vector<string>> ReadDotProcessor::decodeBraille(Mat image) {
-	Mat gray, adaptiveImage, dilateImage, erodeImage;
+	Mat croppedImage, gray, adaptiveImage, dilateImage, erodeImage;
+	
+	// Cropping Border
+	
+	int croppedAreaWidth = image.cols - (2 * cropOffsideX);
+	int croppedAreaHeight = image.rows - (2 * cropOffsideY);
+	Rect croppedArea(cropOffsideX, cropOffsideY, croppedAreaWidth, croppedAreaHeight);
+	
+	croppedImage = image(croppedArea);
 	
 	// Image Pre Processing
 	
-	cvtColor(image, gray, COLOR_BGR2GRAY);
+	cvtColor(croppedImage, gray, COLOR_BGR2GRAY);
 	adaptiveThreshold(gray, adaptiveImage, 255, _adaptiveType ? ADAPTIVE_THRESH_GAUSSIAN_C : ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, _adaptiveBlockSize, _adaptiveConstant);
 	dilate(adaptiveImage, dilateImage, Mat(), Point(-1, -1), _dilateIteration);
 	erode(dilateImage, erodeImage, Mat(), Point(-1, -1), _erodeIteration);
@@ -637,7 +703,7 @@ vector<vector<string>> ReadDotProcessor::decodeBraille(Mat image) {
 	
 	for (int i = 0; i < contours.size(); i++) {
 		double currentArea = contourArea(contours[i]);
-		if ((currentArea > minAreaContourFilter) && (currentArea < maxAreaContourFilter)) {
+		if ((currentArea > _proportionalValue(erodeImage.cols, minAreaContourFilter)) && (currentArea < _proportionalValue(erodeImage.cols, maxAreaContourFilter))) {
 			filteredContours.push_back(contours[i]);
 		}
 	}
@@ -681,20 +747,24 @@ vector<vector<string>> ReadDotProcessor::decodeBraille(Mat image) {
 		vector<int> gotCols;
 		vector<int> gotRows;
 		
-		int avgX = 0;
-		int avgY = 0;
+		double avgX = 0;
+		double avgY = 0;
 		
 		if (coordinatePoint[i].x != -1) {
+			int n = 0;
 			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
 				if (coordinatePoint[j].x != -1) {
 					if (j == i) {
 						gotCols.push_back(coordinatePoint[j].x);
 						avgX = coordinatePoint[j].x;
+						n = 0;
 						coordinatePoint[j].x = -1;
 					} else {
-						if (abs(avgX - coordinatePoint[j].x) < maxSpaceForGroupingSameRowAndCols) {
+						if (abs(avgX - coordinatePoint[j].x) < _proportionalValue(erodeImage.cols, maxSpaceForGroupingSameRowAndCols)) {
 							gotCols.push_back(coordinatePoint[j].x);
-							avgX = (avgX + coordinatePoint[j].x)/2;
+							double delta = coordinatePoint[j].x - avgX;
+							avgX += delta/++n;
+//							avgX = (avgX + coordinatePoint[j].x)/2;
 							coordinatePoint[j].x = -1;
 						}
 					}
@@ -706,16 +776,20 @@ vector<vector<string>> ReadDotProcessor::decodeBraille(Mat image) {
 		}
 		
 		if (coordinatePoint[i].y != -1) {
+			int n = 0;
 			for (unsigned int j = i; j < coordinatePoint.size(); j++) {
 				if (coordinatePoint[j].y != -1) {
 					if (j == i) {
 						gotRows.push_back(coordinatePoint[j].y);
 						avgY = coordinatePoint[j].y;
+						n = 0;
 						coordinatePoint[j].y = -1;
 					} else {
-						if (abs(avgY - coordinatePoint[j].y) < maxSpaceForGroupingSameRowAndCols) {
+						if (abs(avgY - coordinatePoint[j].y) < _proportionalValue(erodeImage.cols, maxSpaceForGroupingSameRowAndCols)) {
 							gotRows.push_back(coordinatePoint[j].y);
-							avgY = (avgY + coordinatePoint[j].y)/2;
+							double delta = coordinatePoint[j].y - avgY;
+							avgY += delta/++n;
+//							avgY = (avgY + coordinatePoint[j].y)/2;
 							coordinatePoint[j].y = -1;
 						}
 					}
@@ -745,7 +819,7 @@ vector<vector<string>> ReadDotProcessor::decodeBraille(Mat image) {
 		vector<int> colPair;
 		
 		if (!shouldSkip) {
-			if ((abs(colsGroupAvg[i] - colsGroupAvg[i + 1]) < maxDotSpaceInterDot) && (i < colsGroupAvg.size() - 1)) {
+			if ((abs(colsGroupAvg[i] - colsGroupAvg[i + 1]) < _proportionalValue(erodeImage.cols, maxDotSpaceInterDot)) && (i < colsGroupAvg.size() - 1)) {
 				colPair.push_back(colsGroupAvg[i]);
 				colPair.push_back(colsGroupAvg[i + 1]);
 				
@@ -754,7 +828,7 @@ vector<vector<string>> ReadDotProcessor::decodeBraille(Mat image) {
 			} else {
 				if (i == 0) {
 					// case for single coordinate found on very first document
-					colPair.push_back(colsGroupAvg[i] - defaultDotSpaceInterDot);
+					colPair.push_back(colsGroupAvg[i] - _proportionalValue(erodeImage.cols, defaultDotSpaceInterDot));
 					colPair.push_back(colsGroupAvg[i]);
 					
 					shouldSkip = true;
@@ -762,7 +836,7 @@ vector<vector<string>> ReadDotProcessor::decodeBraille(Mat image) {
 				} else if (i == colsGroupAvg.size() - 1) {
 					// case for single coordinate found on very end of document
 					colPair.push_back(colsGroupAvg[i]);
-					colPair.push_back(colsGroupAvg[i] + defaultDotSpaceInterDot);
+					colPair.push_back(colsGroupAvg[i] + _proportionalValue(erodeImage.cols, defaultDotSpaceInterDot));
 					
 					colsPairs.push_back(colPair);
 				} else {
@@ -781,7 +855,7 @@ vector<vector<string>> ReadDotProcessor::decodeBraille(Mat image) {
 		vector<int> rowPair;
 		
 		if (shouldSkipCount == 0) {
-			if ((abs(rowsGroupAvg[i] - rowsGroupAvg[i + 1]) < maxDotSpaceInterDot) && (i < rowsGroupAvg.size() - 2)) {
+			if ((abs(rowsGroupAvg[i] - rowsGroupAvg[i + 1]) < _proportionalValue(erodeImage.cols, maxDotSpaceInterDot)) && (i < rowsGroupAvg.size() - 2)) {
 				rowPair.push_back(rowsGroupAvg[i]);
 				rowPair.push_back(rowsGroupAvg[i + 1]);
 				rowPair.push_back(rowsGroupAvg[i + 2]);
@@ -791,8 +865,8 @@ vector<vector<string>> ReadDotProcessor::decodeBraille(Mat image) {
 			} else {
 				if (i == 0) {
 					// case for single coordinate found on very first document
-					rowPair.push_back(rowsGroupAvg[i] - (defaultDotSpaceInterDot * 2));
-					rowPair.push_back(rowsGroupAvg[i] - defaultDotSpaceInterDot);
+					rowPair.push_back(rowsGroupAvg[i] - (_proportionalValue(erodeImage.cols, defaultDotSpaceInterDot) * 2));
+					rowPair.push_back(rowsGroupAvg[i] - _proportionalValue(erodeImage.cols, defaultDotSpaceInterDot));
 					rowPair.push_back(rowsGroupAvg[i]);
 					
 					shouldSkipCount++;
@@ -800,8 +874,8 @@ vector<vector<string>> ReadDotProcessor::decodeBraille(Mat image) {
 				} else if (i == rowsGroupAvg.size() - 1) {
 					// case for single coordinate found on very end of document
 					rowPair.push_back(rowsGroupAvg[i]);
-					rowPair.push_back(rowsGroupAvg[i] + defaultDotSpaceInterDot);
-					rowPair.push_back(rowsGroupAvg[i] + (defaultDotSpaceInterDot * 2));
+					rowPair.push_back(rowsGroupAvg[i] + _proportionalValue(erodeImage.cols, defaultDotSpaceInterDot));
+					rowPair.push_back(rowsGroupAvg[i] + (_proportionalValue(erodeImage.cols, defaultDotSpaceInterDot) * 2));
 					
 					rowsPairs.push_back(rowPair);
 				} else {
@@ -823,7 +897,7 @@ vector<vector<string>> ReadDotProcessor::decodeBraille(Mat image) {
 	Mat circleImage = Mat::zeros(erodeImage.rows, erodeImage.cols, CV_8UC1);
 	
 	for (unsigned int i = 0; i < centerContoursPoint.size(); i++) {
-		circle(circleImage, centerContoursPoint[i], redrawCircleSize, Scalar::all(255), -1);
+		circle(circleImage, centerContoursPoint[i], _proportionalValue(erodeImage.cols, redrawCircleSize), Scalar::all(255), -1);
 	}
 	
 	// Reading value of every char
@@ -853,5 +927,10 @@ vector<vector<string>> ReadDotProcessor::decodeBraille(Mat image) {
 		cout << endl;
 	}
 	
+	return result;
+}
+
+double ReadDotProcessor::_proportionalValue(int imageWidth, double value) {
+	double result = (value / 2646.0) * (double)imageWidth;
 	return result;
 }

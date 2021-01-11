@@ -19,9 +19,15 @@ using namespace cv;
 	ConvertColorProcessor* _convertColorProcessor;
 }
 
-- (instancetype _Nonnull)initWithAdaptiveType:(BOOL)adaptiveType adaptiveBlockSize:(NSInteger)adaptiveBlockSize adaptiveConstant:(double)adaptiveConstant dilateIteration:(NSInteger)dilateIteration erodeIteration:(NSInteger)erodeIteration {
+- (instancetype _Nonnull)initWithAdaptiveType:(BOOL)adaptiveType
+							adaptiveBlockSize:(NSInteger)adaptiveBlockSize
+							 adaptiveConstant:(double)adaptiveConstant
+							  dilateIteration:(NSInteger)dilateIteration
+							   erodeIteration:(NSInteger)erodeIteration
+								 cropOffsideX:(NSInteger)cropOffsideX
+								 cropOffsideY:(NSInteger)cropOffsideY {
 	if ((self = [super init])) {
-		_convertColorProcessor = new ConvertColorProcessor(adaptiveType, (int) adaptiveBlockSize, adaptiveConstant, (int) dilateIteration, (int) erodeIteration);
+		_convertColorProcessor = new ConvertColorProcessor(adaptiveType, (int) adaptiveBlockSize, adaptiveConstant, (int) dilateIteration, (int) erodeIteration, (int) cropOffsideX, (int) cropOffsideY);
 	}
 	
 	return self;
@@ -45,6 +51,13 @@ using namespace cv;
 
 - (void)setErodeIteration:(NSInteger)erodeIteration {
 	_convertColorProcessor->erodeIteration = (int) erodeIteration;
+}
+
+- (UIImage *_Nonnull)makeCroppedFromImage:(UIImage *_Nonnull)image {
+	Mat opencvImage;
+	UIImageToMat(image, opencvImage);
+	
+	return MatToUIImage(_convertColorProcessor->cropImage(opencvImage));
 }
 
 - (UIImage *)makeGrayFromImage:(UIImage *)image {
