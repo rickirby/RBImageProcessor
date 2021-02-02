@@ -58,5 +58,25 @@
 	<string>z</string>
 	<key>010111</key>
 	<string>#</string>
+	<key>001101</key>
+	<string>.</string>
+	<key>001000</key>
+	<string>,</string>
+	<key>001010</key>
+	<string>;</string>
+	<key>001100</key>
+	<string>:</string>
+	<key>001011</key>
+	<string>?</string>
+	<key>001110</key>
+	<string>!</string>
+	<key>000111</key>
+	<string>&quot;</string>
+	<key>000001</key>
+	<string>,</string>
+	<key>000011</key>
+	<string>-</string>
+	<key>000010</key>
+	<string>&apos;</string>
 </dict>
 </plist>
